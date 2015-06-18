@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <integer name="bar_weight">1</integer>
+    <string name="bar_title_margin">4dp</string>
+    <integer name="bar_title_fontSize">22</integer>
+</resources>

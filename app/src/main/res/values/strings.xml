@@ -1,0 +1,23 @@
+<resources>
+    <string name="app_name">Rain</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <item name="fill" format="float" type="dimen">0.2</item>
+    <item name="full" format="float" type="dimen">0.8</item>
+    <string name="title_activity_rain_meter">RainMeter</string>
+    <string name="Rain.Main.Buttons.Current">Current rain amount</string>
+    <string name="Rain.Main.Buttons.Today">Total rain today</string>
+    <string name="Rain.Main.Buttons.Sun">Sun in minutes</string>
+    <string name="title_activity_container">Rain</string>
+
+    <string name="title_section_currently">Currently</string>
+    <string name="title_section_today">Today</string>
+    <string name="title_section_sun">Sun</string>
+    <string name="title_activity_main">Rain</string>
+    <string name="rain">Rain</string>
+    <string name="pressure">Pressure</string>
+    <string name="temparature">Temp</string>
+    <string name="weather_icon">Weather icon</string>
+    <string name="location">Thun</string>
+</resources>

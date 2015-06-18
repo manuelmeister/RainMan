@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="rain_background">#A2006CFF</color>
+    <color name="pressure_background">#a0000000</color>
+    <color name="temperature_background_freezing">#a0007eff</color>
+    <color name="temperature_background_cold">#a000f2ff</color>
+    <color name="temperature_background_normal">#c802d900</color>
+    <color name="temperature_background_comfy">#bda9ff00</color>
+    <color name="temperature_background_warm">#a0ffeb00</color>
+    <color name="temperature_background_hot">#a0ff3900</color>
+
+    <color name="text_white">#ffffffff</color>
+    <color name="text_black">#ff000000</color>
+</resources>
