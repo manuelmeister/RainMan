@@ -18,7 +18,7 @@ public class Temperature {
         max = object.getDouble("max");
         night = object.getDouble("night");
         evening = object.getDouble("eve");
-        morning = object.getDouble("morning");
+        morning = object.getDouble("morn");
     }
 
     public double getDay() {
