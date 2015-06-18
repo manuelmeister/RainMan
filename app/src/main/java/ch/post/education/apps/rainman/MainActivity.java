@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -44,5 +43,12 @@ public class MainActivity extends BasicActivity {
 
     @Override
     public void display(JSONObject jsonObject) {
+        try {
+            JSONObject location = jsonObject.getJSONObject("city");
+            JSONObject forecast = jsonObject.getJSONArray("list").getJSONObject(0);
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
