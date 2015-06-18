@@ -3,9 +3,15 @@ package ch.post.education.apps.rainman;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.ViewGroup;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import ch.post.education.apps.rainman.Model.Forecast;
+import ch.post.education.apps.rainman.Model.Location;
 
 
 public class MainActivity extends BasicActivity {
@@ -44,8 +50,32 @@ public class MainActivity extends BasicActivity {
     @Override
     public void display(JSONObject jsonObject) {
         try {
-            JSONObject location = jsonObject.getJSONObject("city");
-            JSONObject forecast = jsonObject.getJSONArray("list").getJSONObject(0);
+            Location location = new Location(jsonObject.getJSONObject("city"));
+            Forecast forecast = new Forecast(jsonObject.getJSONArray("list").getJSONObject(0));
+
+            TextView text_location = (TextView) findViewById(R.id.location);
+            text_location.setText(location.getName());
+
+            FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
+            ViewGroup.LayoutParams bar_rain_layout = bar_rain.getLayoutParams();
+            bar_rain.getLayoutParams().height = (int)(10 * forecast.getRain());
+
+            TextView bar_rain_value = (TextView) findViewById(R.id.bar_rain_value);
+            bar_rain_value.setText(String.valueOf(forecast.getRain()) + " mm");
+
+            FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
+            ViewGroup.LayoutParams bar_pressure_layout = bar_rain.getLayoutParams();
+            bar_pressure_layout.height = (int)( forecast.getPressure()/5);
+
+            TextView bar_pressure_value = (TextView) findViewById(R.id.bar_pressure_value);
+            bar_pressure_value.setText(String.valueOf(forecast.getPressure()) + " hPa");
+
+            FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
+            ViewGroup.LayoutParams bar_temperature_layout = bar_rain.getLayoutParams();
+            bar_temperature_layout.height = (int)(100 * forecast.getTemperature().getDay());
+
+            TextView bar_temperature_value = (TextView) findViewById(R.id.bar_temperature_value);
+            bar_temperature_value.setText(String.valueOf(forecast.getTemperature().getDay()) + " °C");
 
         } catch (JSONException e) {
             e.printStackTrace();
