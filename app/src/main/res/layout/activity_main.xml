@@ -48,7 +48,7 @@
             android:id="@+id/bar_rain"
             android:background="@color/rain_background"
             android:layout_weight="@integer/bar_weight"
-            android:minHeight="36dp">
+            android:minHeight="60dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -79,7 +79,7 @@
             android:id="@+id/bar_pressure"
             android:background="@color/pressure_background"
             android:layout_weight="@integer/bar_weight"
-            android:minHeight="36dp">
+            android:minHeight="60dp">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
             android:id="@+id/bar_temperature"
             android:background="@color/temperature_background_cold"
             android:layout_weight="@integer/bar_weight"
-            android:minHeight="36dp">
+            android:minHeight="60dp">
 
             <TextView
                 android:layout_width="wrap_content"
