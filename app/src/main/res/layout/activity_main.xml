@@ -42,8 +42,8 @@
         android:layout_alignParentBottom="true">
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="120dp"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
             android:layout_gravity="bottom|center_horizontal"
             android:id="@+id/bar_rain"
             android:background="@color/rain_background"
@@ -73,7 +73,7 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="wrap_content"
+            android:layout_width="fill_parent"
             android:layout_height="60dp"
             android:layout_gravity="bottom|center_horizontal"
             android:id="@+id/bar_pressure"
@@ -104,8 +104,8 @@
         </FrameLayout>
 
         <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="150dp"
+            android:layout_width="fill_parent"
+            android:layout_height="60dp"
             android:layout_gravity="bottom|center_horizontal"
             android:id="@+id/bar_temperature"
             android:background="@color/temperature_background_cold"
