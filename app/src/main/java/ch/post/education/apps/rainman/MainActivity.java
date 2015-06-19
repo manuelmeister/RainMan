@@ -1,6 +1,9 @@
 package ch.post.education.apps.rainman;
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.ViewGroup;
@@ -58,21 +61,22 @@ public class MainActivity extends BasicActivity {
 
             FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
             ViewGroup.LayoutParams bar_rain_layout = bar_rain.getLayoutParams();
-            bar_rain.getLayoutParams().height = (int)(10 * forecast.getRain());
+            bar_rain_layout.height = setHeight(forecast.getRain() * 5);
 
             TextView bar_rain_value = (TextView) findViewById(R.id.bar_rain_value);
             bar_rain_value.setText(String.valueOf(forecast.getRain()) + " mm");
 
             FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
-            ViewGroup.LayoutParams bar_pressure_layout = bar_rain.getLayoutParams();
-            bar_pressure_layout.height = (int)( forecast.getPressure()/5);
+            ViewGroup.LayoutParams bar_pressure_layout = bar_pressure.getLayoutParams();
+            bar_pressure_layout.height = setHeight(forecast.getPressure()/6);
 
             TextView bar_pressure_value = (TextView) findViewById(R.id.bar_pressure_value);
             bar_pressure_value.setText(String.valueOf(forecast.getPressure()) + " hPa");
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
-            ViewGroup.LayoutParams bar_temperature_layout = bar_rain.getLayoutParams();
-            bar_temperature_layout.height = (int)(100 * forecast.getTemperature().getDay());
+            ViewGroup.LayoutParams bar_temperature_layout = bar_temperature.getLayoutParams();
+            bar_temperature_layout.height = setHeight(forecast.getTemperature().getDay()*10);
+            bar_temperature.setBackgroundColor(setBGColor(forecast.getTemperature().getDay()));
 
             TextView bar_temperature_value = (TextView) findViewById(R.id.bar_temperature_value);
             bar_temperature_value.setText(String.valueOf(forecast.getTemperature().getDay()) + " °C");
@@ -80,5 +84,28 @@ public class MainActivity extends BasicActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public int setHeight(double height){
+        float pixels = (float)((height >= 60) ? height : 60);
+        return (int)(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pixels, getResources().getDisplayMetrics()));
+    }
+
+    public int setBGColor(double temp){
+        int color;
+        if(temp > 35){
+            color = R.color.temperature_background_hot;
+        }else if(temp > 30){
+            color = R.color.temperature_background_warm;
+        }else if(temp > 21){
+            color = R.color.temperature_background_comfy;
+        }else if(temp > 16){
+            color = R.color.temperature_background_normal;
+        }else if(temp > 0){
+            color = R.color.temperature_background_cold;
+        }else {
+            color = R.color.temperature_background_freezing;
+        }
+        return getResources().getColor(color);
     }
 }
