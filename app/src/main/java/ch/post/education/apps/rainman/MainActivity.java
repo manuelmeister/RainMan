@@ -1,7 +1,5 @@
 package ch.post.education.apps.rainman;
 
-import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -25,7 +23,7 @@ public class MainActivity extends BasicActivity {
         setContentView(R.layout.activity_main);
 
         JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=thun&mode=json&units=metric&cnt=2");
+        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=Alaghsas&mode=json&units=metric&cnt=2");
     }
 
     @Override
@@ -64,7 +62,11 @@ public class MainActivity extends BasicActivity {
             bar_rain_layout.height = setHeight(forecast.getRain() * 5);
 
             TextView bar_rain_value = (TextView) findViewById(R.id.bar_rain_value);
-            bar_rain_value.setText(String.valueOf(forecast.getRain()) + " mm");
+            if(forecast.getRain() != 0){
+                bar_rain_value.setText(String.valueOf(forecast.getRain()) + " mm");
+            }else {
+                bar_rain_value.setText(R.string.no_rain);
+            }
 
             FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
             ViewGroup.LayoutParams bar_pressure_layout = bar_pressure.getLayoutParams();
@@ -101,7 +103,7 @@ public class MainActivity extends BasicActivity {
             color = R.color.temperature_background_comfy;
         }else if(temp > 16){
             color = R.color.temperature_background_normal;
-        }else if(temp > 0){
+        }else if(temp > 1){
             color = R.color.temperature_background_cold;
         }else {
             color = R.color.temperature_background_freezing;

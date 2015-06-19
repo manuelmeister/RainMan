@@ -24,7 +24,11 @@ public class Forecast {
         weather = new Weather(object.getJSONArray("weather").getJSONObject(0));
         wind = new Wind(object.getDouble("speed"),object.getInt("deg"));
         clouds = object.getInt("clouds");
-        rain = object.getDouble("rain");
+        try {
+            rain = object.getDouble("rain");
+        }catch (JSONException e){
+            rain = 0;
+        }
     }
 
     public Date getReceivingTime() {
