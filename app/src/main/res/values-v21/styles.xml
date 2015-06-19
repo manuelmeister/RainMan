@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Rain" parent="android:Theme.Material.Light">
+    <style name="Rain" parent="android:Theme.Material.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/Rain.ActionBar</item>
     </style>
+
+    <style name="Rain.ActionBar" parent="android:Widget.Material.Light.ActionBar">
+        <item name="android:titleTextStyle">@style/Rain.ActionBar.Title</item>
+        <item name="android:background">@color/temperature_background_freezing</item>
+    </style>
+
+    <style name="Rain.ActionBar.Title">
+        <item name="android:textColor">@color/text_white</item>
+    </style>
+
+
 </resources>

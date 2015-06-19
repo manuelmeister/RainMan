@@ -1,5 +1,7 @@
 package ch.post.education.apps.rainman;
 
+import android.app.ActionBar;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -18,7 +20,6 @@ import org.json.JSONObject;
 import ch.post.education.apps.rainman.Model.Forecast;
 import ch.post.education.apps.rainman.Model.Location;
 
-
 public class MainActivity extends BasicActivity {
 
     @Override
@@ -27,7 +28,7 @@ public class MainActivity extends BasicActivity {
         setContentView(R.layout.activity_main);
 
         JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=thun&mode=json&units=metric&cnt=2");
+        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=Vishakhapatnam&mode=json&units=metric&cnt=2");
     }
 
     @Override
@@ -84,9 +85,7 @@ public class MainActivity extends BasicActivity {
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
             ViewGroup.LayoutParams bar_temperature_layout = bar_temperature.getLayoutParams();
             int bar_temperature_height = getHeight(forecast.getTemperature().getDay() * 10);
-            expand(bar_temperature,bar_temperature_height);
-
-            bar_temperature.setBackgroundColor(setBGColor(forecast.getTemperature().getDay()));
+            expand(bar_temperature, bar_temperature_height,forecast.getTemperature().getDay());
 
             TextView bar_temperature_value = (TextView) findViewById(R.id.bar_temperature_value);
             bar_temperature_value.setText(String.valueOf(forecast.getTemperature().getDay()) + " °C");
@@ -103,16 +102,28 @@ public class MainActivity extends BasicActivity {
 
     public int setBGColor(double temp){
         int color;
-        if(temp > 35){
+        if(temp > 40){
+            color = R.color.temperature_background_really_hot;
+        }else if(temp > 35){
             color = R.color.temperature_background_hot;
         }else if(temp > 30){
+            color = R.color.temperature_background_quite_warm;
+        }else if(temp > 25){
             color = R.color.temperature_background_warm;
         }else if(temp > 21){
+            color = R.color.temperature_background_quite_comfy;
+        }else if(temp > 18){
             color = R.color.temperature_background_comfy;
         }else if(temp > 16){
+            color = R.color.temperature_background_quite_normal;
+        }else if(temp > 10){
             color = R.color.temperature_background_normal;
+        }else if(temp > 5){
+            color = R.color.temperature_background_quite_cold;
         }else if(temp > 1){
             color = R.color.temperature_background_cold;
+        }else if(temp > -1){
+            color = R.color.temperature_background_quite_freezing;
         }else {
             color = R.color.temperature_background_freezing;
         }
@@ -125,6 +136,29 @@ public class MainActivity extends BasicActivity {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = (int)(targetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)*3);
+        a.setInterpolator(new AccelerateDecelerateInterpolator());
+        v.startAnimation(a);
+        v.requestLayout();
+    }
+
+    public void expand(final View v, final int targetHeight,final double temp) {
+        Animation a = new Animation()
+        {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = (int)(targetHeight * interpolatedTime);
+                v.setBackgroundColor(setBGColor(temp * interpolatedTime));
                 v.requestLayout();
             }
 

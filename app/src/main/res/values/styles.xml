@@ -1,8 +1,21 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="Rain" parent="Theme.AppCompat.Light">
-        <!-- Customize your theme here. -->
+    <style name="Rain" parent="@style/Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:actionBarStyle">@style/Rain.ActionBar</item>
+        <item name="actionBarStyle">@style/Rain.ActionBar</item>
+    </style>
+
+    <style name="Rain.ActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid.Inverse">
+        <item name="android:background">@color/rain_background</item>
+        <item name="android:titleTextStyle">@style/Rain.ActionBar.Title</item>
+
+        <item name="background">@color/rain_background</item>
+        <item name="titleTextStyle">@style/Rain.ActionBar.Title</item>
+    </style>
+
+    <style name="Rain.ActionBar.Title" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/text_white</item>
     </style>
 
 </resources>
