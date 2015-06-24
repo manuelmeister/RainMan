@@ -1,8 +1,8 @@
 package ch.post.education.apps.rainman;
 
-import android.app.ActionBar;
-import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -12,6 +12,7 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -28,7 +29,7 @@ public class MainActivity extends BasicActivity {
         setContentView(R.layout.activity_main);
 
         JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=Vishakhapatnam&mode=json&units=metric&cnt=2");
+        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=Thun&mode=json&units=metric&cnt=2");
     }
 
     @Override
@@ -77,7 +78,7 @@ public class MainActivity extends BasicActivity {
             FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
             ViewGroup.LayoutParams bar_pressure_layout = bar_pressure.getLayoutParams();
             int bar_pressure_height = getHeight(forecast.getPressure() / 6);
-            expand(bar_pressure,bar_pressure_height);
+            expand(bar_pressure, bar_pressure_height);
 
             TextView bar_pressure_value = (TextView) findViewById(R.id.bar_pressure_value);
             bar_pressure_value.setText(String.valueOf(forecast.getPressure()) + " hPa");
@@ -85,10 +86,13 @@ public class MainActivity extends BasicActivity {
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
             ViewGroup.LayoutParams bar_temperature_layout = bar_temperature.getLayoutParams();
             int bar_temperature_height = getHeight(forecast.getTemperature().getDay() * 10);
-            expand(bar_temperature, bar_temperature_height,forecast.getTemperature().getDay());
+            expand(bar_temperature, bar_temperature_height, forecast.getTemperature().getDay());
 
             TextView bar_temperature_value = (TextView) findViewById(R.id.bar_temperature_value);
             bar_temperature_value.setText(String.valueOf(forecast.getTemperature().getDay()) + " °C");
+
+            ImageView weather_icon = (ImageView) findViewById(R.id.weather_icon);
+            weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -100,7 +104,44 @@ public class MainActivity extends BasicActivity {
         return (int)(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pixels, getResources().getDisplayMetrics()));
     }
 
-    public int setBGColor(double temp){
+    public int getWeatherIcon(String weather){
+        int msg = 0;
+        switch (weather){
+            case "clear sky":
+                msg = R.drawable.weather_sun;
+                break;
+            case "few clouds":
+                msg = R.drawable.weather_partly_cloudy_day;
+                break;
+            case "scattered clouds":
+                msg = R.drawable.weather_clouds;
+                break;
+            case "broken clouds":
+                msg = R.drawable.weather_clouds;
+                break;
+            case "shower rain":
+                msg = R.drawable.weather_rain;
+                break;
+            case "rain":
+                msg = R.drawable.weather_rainy_weather;
+                break;
+            case "thunderstorm":
+                msg = R.drawable.weather_storm;
+                break;
+            case "snow":
+                msg = R.drawable.weather_snow;
+                break;
+            case "mist":
+                msg = R.drawable.weather_fog_day;
+                break;
+            default:
+                msg = R.drawable.weather_sun;
+                break;
+        }
+        return msg;
+    }
+
+    public int getBGColor(double temp){
         int color;
         if(temp > 40){
             color = R.color.temperature_background_really_hot;
@@ -158,7 +199,7 @@ public class MainActivity extends BasicActivity {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = (int)(targetHeight * interpolatedTime);
-                v.setBackgroundColor(setBGColor(temp * interpolatedTime));
+                v.setBackgroundColor(getBGColor(temp * interpolatedTime));
                 v.requestLayout();
             }
 
