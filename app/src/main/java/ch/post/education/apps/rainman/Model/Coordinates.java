@@ -8,6 +8,11 @@ public class Coordinates {
     private double lon;
     private double lat;
 
+    public Coordinates(double lon, double lat) {
+        this.lon = lon;
+        this.lat = lat;
+    }
+
     public Coordinates(JSONObject object) throws JSONException {
         lon = object.getDouble("lon");
         lat = object.getDouble("lat");
