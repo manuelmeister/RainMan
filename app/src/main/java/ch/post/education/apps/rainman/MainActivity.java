@@ -1,6 +1,8 @@
 package ch.post.education.apps.rainman;
 
 import android.graphics.drawable.Drawable;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.TypedValue;
@@ -18,18 +20,48 @@ import android.widget.TextView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.post.education.apps.rainman.Model.Coordinates;
 import ch.post.education.apps.rainman.Model.Forecast;
 import ch.post.education.apps.rainman.Model.Location;
 
 public class MainActivity extends BasicActivity {
+
+    public Coordinates cords;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        getLocation(this);
+}
+
+    private void getLocation(BasicActivity activity) {
+        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+        LocationListener locationListener = new LocationListener() {
+
+            @Override
+            public void onLocationChanged(android.location.Location location) {
+                cords = new Coordinates(location.getLongitude(), location.getLatitude());
+                runTask();
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider) {}
+
+            public void onProviderDisabled(String provider) {}
+
+
+        };
+
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+    }
+
+    public void runTask(){
         JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=Thun&mode=json&units=metric&cnt=2");
+        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat="+cords.getLat()+"&lon="+cords.getLon()+"&mode=json&units=metric&cnt=2");
     }
 
     @Override
