@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="error">#a2030303</color>
+
     <color name="rain_background">#A2006CFF</color>
     <color name="pressure_background">#a0000000</color>
 

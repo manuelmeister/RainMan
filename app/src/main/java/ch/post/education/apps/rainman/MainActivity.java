@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.Transformation;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import org.json.JSONException;
@@ -33,7 +34,11 @@ public class MainActivity extends BasicActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getLocation(this);
+        try{
+            getLocation(this);
+            showError("Error", "not found");
+        }catch (Exception e){
+        }
 }
 
     private void getLocation(BasicActivity activity) {
@@ -56,12 +61,12 @@ public class MainActivity extends BasicActivity {
 
         };
 
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
     }
 
     public void runTask(){
         JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat="+cords.getLat()+"&lon="+cords.getLon()+"&mode=json&units=metric&cnt=2");
+        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + cords.getLat() + "&lon=" + cords.getLon() + "&mode=json&units=metric&cnt=2");
     }
 
     @Override
@@ -96,7 +101,6 @@ public class MainActivity extends BasicActivity {
             text_location.setText(location.getName());
 
             FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
-            ViewGroup.LayoutParams bar_rain_layout = bar_rain.getLayoutParams();
             int bar_rain_height = getHeight(forecast.getRain() * 5);
             expand(bar_rain,bar_rain_height);
 
@@ -108,7 +112,6 @@ public class MainActivity extends BasicActivity {
             }
 
             FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
-            ViewGroup.LayoutParams bar_pressure_layout = bar_pressure.getLayoutParams();
             int bar_pressure_height = getHeight(forecast.getPressure() / 6);
             expand(bar_pressure, bar_pressure_height);
 
@@ -116,7 +119,6 @@ public class MainActivity extends BasicActivity {
             bar_pressure_value.setText(String.valueOf(forecast.getPressure()) + " hPa");
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
-            ViewGroup.LayoutParams bar_temperature_layout = bar_temperature.getLayoutParams();
             int bar_temperature_height = getHeight(forecast.getTemperature().getDay() * 10);
             expand(bar_temperature, bar_temperature_height, forecast.getTemperature().getDay());
 
@@ -171,6 +173,35 @@ public class MainActivity extends BasicActivity {
                 break;
         }
         return msg;
+    }
+
+    public void showError(String title, String message){
+        FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
+        int bar_rain_height = getHeight(300);
+        expand(bar_rain, bar_rain_height);
+        bar_rain.setBackgroundColor(getResources().getColor(R.color.error));
+
+        FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
+        int bar_pressure_height = getHeight(300);
+        expand(bar_pressure, bar_pressure_height);
+        bar_pressure.setBackgroundColor(getResources().getColor(R.color.error));
+
+        FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
+        int bar_temperature_height = getHeight(300);
+        expand(bar_temperature, bar_temperature_height);
+        bar_temperature.setBackgroundColor(getResources().getColor(R.color.error));
+
+        TextView title_message = (TextView) findViewById(R.id.title);
+        title_message.setText(title);
+        title_message.setVisibility(View.VISIBLE);
+
+        TextView message_message = (TextView) findViewById(R.id.message);
+        message_message.setText(message);
+        message_message.setVisibility(View.VISIBLE);
+
+        TextClock time = (TextClock) findViewById(R.id.time);
+        time.setVisibility(View.INVISIBLE);
+        time.requestLayout();
     }
 
     public int getBGColor(double temp){
