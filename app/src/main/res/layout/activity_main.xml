@@ -1,162 +1,172 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:id="@+id/rain_meter"
+<android.support.v4.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity"
-    android:padding="0dp">
-
-    <ImageView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/weather_icon"
-        android:layout_gravity="center_horizontal|top"
-        android:src="@drawable/weather_sun"
-        android:layout_marginTop="20dp"
-        android:contentDescription="@string/weather_icon" />
-
-    <TextView
+    android:id="@+id/Swipe"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content">
+    <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="@string/location"
-        android:id="@+id/location"
-        android:layout_below="@+id/weather_icon"
-        android:layout_centerHorizontal="true" />
+        android:fillViewport="true">
+        <RelativeLayout  android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/rain_meter"
+            android:padding="0dp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/Error"
-        android:id="@+id/Title"
-        android:layout_below="@+id/location"
-        android:layout_centerHorizontal="true"
-        android:textSize="60dp"
-        android:visibility="invisible" />
-
-    <TextClock
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/time"
-        android:layout_gravity="center_horizontal"
-        android:textSize="60sp"
-        android:layout_centerHorizontal="true"
-        android:layout_below="@+id/location" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Medium Text"
-        android:id="@+id/message"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="false"
-        android:layout_alignParentLeft="false"
-        android:layout_alignParentTop="false"
-        android:layout_alignWithParentIfMissing="false"
-        android:layout_below="@+id/time"
-        android:visibility="invisible" />
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="fill_parent"
-        android:layout_height="match_parent"
-        android:weightSum="3"
-        android:id="@+id/container_bar"
-        android:baselineAligned="false"
-        android:layout_alignParentBottom="true">
-
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:id="@+id/bar_rain"
-            android:background="@color/rain_background"
-            android:layout_weight="@integer/bar_weight"
-            android:minHeight="60dp">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <ImageView
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="4 mm"
-                android:id="@+id/bar_rain_value"
+                android:id="@+id/weather_icon"
                 android:layout_gravity="center_horizontal|top"
-                android:visibility="visible"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="-8dp"
-                android:textColor="@color/text_white" />
+                android:src="@drawable/weather_sun"
+                android:layout_marginTop="20dp"
+                android:contentDescription="@string/weather_icon" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/rain"
-                android:id="@+id/bar_rain_title"
-                android:layout_gravity="center_horizontal|bottom"
-                android:textSize="22sp"
-                android:textColor="@color/text_white"
-                android:layout_marginBottom="4dp" />
-        </FrameLayout>
-
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:id="@+id/bar_pressure"
-            android:background="@color/pressure_background"
-            android:layout_weight="@integer/bar_weight"
-            android:minHeight="60dp">
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/location"
+                android:id="@+id/location"
+                android:layout_below="@+id/weather_icon"
+                android:layout_centerHorizontal="true" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="4 mm"
-                android:id="@+id/bar_pressure_value"
-                android:layout_gravity="center_horizontal|top"
-                android:visibility="visible"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="-8dp"
-                android:textColor="@color/text_white" />
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/Error"
+                android:id="@+id/Title"
+                android:layout_below="@+id/location"
+                android:layout_centerHorizontal="true"
+                android:textSize="60dp"
+                android:visibility="invisible" />
+
+            <TextClock
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/time"
+                android:layout_gravity="center_horizontal"
+                android:textSize="60sp"
+                android:layout_centerHorizontal="true"
+                android:layout_below="@+id/location" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/pressure"
-                android:id="@+id/bar_pressure_title"
-                android:layout_gravity="center_horizontal|bottom"
-                android:textSize="22sp"
-                android:textColor="@color/text_white"
-                android:layout_marginBottom="4dp" />
-        </FrameLayout>
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Medium Text"
+                android:id="@+id/message"
+                android:layout_centerHorizontal="true"
+                android:layout_alignParentBottom="false"
+                android:layout_alignParentLeft="false"
+                android:layout_alignParentTop="false"
+                android:layout_alignWithParentIfMissing="false"
+                android:layout_below="@+id/time"
+                android:visibility="invisible" />
 
-        <FrameLayout
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:layout_gravity="bottom|center_horizontal"
-            android:id="@+id/bar_temperature"
-            android:background="@color/temperature_background_cold"
-            android:layout_weight="@integer/bar_weight"
-            android:minHeight="60dp">
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:weightSum="3"
+                android:id="@+id/container_bar"
+                android:baselineAligned="false"
+                android:layout_alignParentBottom="true">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4 mm"
-                android:id="@+id/bar_temperature_value"
-                android:layout_gravity="center_horizontal|top"
-                android:visibility="visible"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="-8dp" />
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:id="@+id/bar_rain"
+                    android:background="@color/rain_background"
+                    android:layout_weight="@integer/bar_weight"
+                    android:minHeight="60dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/temparature"
-                android:id="@+id/bar_temperature_title"
-                android:layout_gravity="center_horizontal|bottom"
-                android:layout_marginBottom="4dp"
-                android:textSize="22sp" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 mm"
+                        android:id="@+id/bar_rain_value"
+                        android:layout_gravity="center_horizontal|top"
+                        android:visibility="visible"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="-8dp"
+                        android:textColor="@color/text_white" />
 
-        </FrameLayout>
-    </LinearLayout>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/rain"
+                        android:id="@+id/bar_rain_title"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:textSize="22sp"
+                        android:textColor="@color/text_white"
+                        android:layout_marginBottom="4dp" />
+                </FrameLayout>
 
-</RelativeLayout>
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:id="@+id/bar_pressure"
+                    android:background="@color/pressure_background"
+                    android:layout_weight="@integer/bar_weight"
+                    android:minHeight="60dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 mm"
+                        android:id="@+id/bar_pressure_value"
+                        android:layout_gravity="center_horizontal|top"
+                        android:visibility="visible"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="-8dp"
+                        android:textColor="@color/text_white" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/pressure"
+                        android:id="@+id/bar_pressure_title"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:textSize="22sp"
+                        android:textColor="@color/text_white"
+                        android:layout_marginBottom="4dp" />
+                </FrameLayout>
+
+                <FrameLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="60dp"
+                    android:layout_gravity="bottom|center_horizontal"
+                    android:id="@+id/bar_temperature"
+                    android:background="@color/temperature_background_cold"
+                    android:layout_weight="@integer/bar_weight"
+                    android:minHeight="60dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="4 mm"
+                        android:id="@+id/bar_temperature_value"
+                        android:layout_gravity="center_horizontal|top"
+                        android:visibility="visible"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginBottom="-8dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/temparature"
+                        android:id="@+id/bar_temperature_title"
+                        android:layout_gravity="center_horizontal|bottom"
+                        android:layout_marginBottom="4dp"
+                        android:textSize="22sp" />
+
+                </FrameLayout>
+            </LinearLayout>
+
+        </RelativeLayout>
+    </ScrollView>
+</android.support.v4.widget.SwipeRefreshLayout>
