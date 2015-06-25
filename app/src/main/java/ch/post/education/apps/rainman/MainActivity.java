@@ -28,23 +28,15 @@ import ch.post.education.apps.rainman.Model.Location;
 public class MainActivity extends BasicActivity {
 
     public Coordinates cords;
+    LocationManager locationManager;
+    LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        try{
-            getLocation(this);
-            showError("Error", "not found");
-        }catch (Exception e){
-        }
-}
-
-    private void getLocation(BasicActivity activity) {
-        LocationManager locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-
-        LocationListener locationListener = new LocationListener() {
+        this.locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
+        this.locationListener = new LocationListener() {
 
             @Override
             public void onLocationChanged(android.location.Location location) {
@@ -60,13 +52,35 @@ public class MainActivity extends BasicActivity {
 
 
         };
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(locationListener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try{
+            getLocation();
+            showError("Error", "not found");
+        }catch (Exception e){}
+
+    }
+
+    private void getLocation() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
     }
 
     public void runTask(){
         JSONAsyncTask task = new JSONAsyncTask(this);
         task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + cords.getLat() + "&lon=" + cords.getLon() + "&mode=json&units=metric&cnt=2");
+        locationManager.removeUpdates(locationListener);
+
     }
 
     @Override
