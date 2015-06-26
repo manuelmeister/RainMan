@@ -2,17 +2,14 @@ package ch.post.education.apps.rainman;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
-import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -66,8 +63,7 @@ public class MainActivity extends BasicActivity {
         });
         
         try{
-            getLocation(this);
-            showError("Error", "not found");
+            getLocation();
         }catch (Exception e){
         }
     }
@@ -84,7 +80,6 @@ public class MainActivity extends BasicActivity {
 
         try{
             getLocation();
-            showError("Error", "not found");
         }catch (Exception e){}
 
     }
