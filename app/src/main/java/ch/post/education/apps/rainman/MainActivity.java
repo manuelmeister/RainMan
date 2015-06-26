@@ -122,6 +122,16 @@ public class MainActivity extends BasicActivity {
     @Override
     public void display(JSONObject jsonObject) {
         try {
+            TextView title_message = (TextView) findViewById(R.id.ErrorTitle);
+            title_message.setVisibility(View.INVISIBLE);
+
+            TextView message_message = (TextView) findViewById(R.id.message);
+            message_message.setVisibility(View.INVISIBLE);
+
+            TextClock time = (TextClock) findViewById(R.id.time);
+            time.setVisibility(View.VISIBLE);
+            time.requestLayout();
+
             Location location = new Location(jsonObject.getJSONObject("city"));
             Forecast forecast = new Forecast(jsonObject.getJSONArray("list").getJSONObject(0));
 
@@ -130,6 +140,10 @@ public class MainActivity extends BasicActivity {
 
             FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
             int bar_rain_height = getHeight(forecast.getRain() * 5);
+            bar_rain.setBackgroundColor(getResources().getColor(R.color.rain_background));
+
+
+
             expand(bar_rain,bar_rain_height);
 
             TextView bar_rain_value = (TextView) findViewById(R.id.bar_rain_value);
@@ -141,6 +155,7 @@ public class MainActivity extends BasicActivity {
 
             FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
             int bar_pressure_height = getHeight(forecast.getPressure() / 6);
+            bar_pressure.setBackgroundColor(getResources().getColor(R.color.pressure_background));
             expand(bar_pressure, bar_pressure_height);
 
             TextView bar_pressure_value = (TextView) findViewById(R.id.bar_pressure_value);
@@ -157,7 +172,7 @@ public class MainActivity extends BasicActivity {
             weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
 
         } catch (JSONException e) {
-            e.printStackTrace();
+            showError("Error", e.getMessage());
         }
     }
 
@@ -203,7 +218,7 @@ public class MainActivity extends BasicActivity {
         return msg;
     }
 
-    public void showError(String title, String message){
+    public void showError(CharSequence title, String message){
         FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
         int bar_rain_height = getHeight(300);
         expand(bar_rain, bar_rain_height);
@@ -219,7 +234,7 @@ public class MainActivity extends BasicActivity {
         expand(bar_temperature, bar_temperature_height);
         bar_temperature.setBackgroundColor(getResources().getColor(R.color.error));
 
-        TextView title_message = (TextView) findViewById(R.id.title);
+        TextView title_message = (TextView) findViewById(R.id.ErrorTitle);
         title_message.setText(title);
         title_message.setVisibility(View.VISIBLE);
 

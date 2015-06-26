@@ -3,6 +3,8 @@ package ch.post.education.apps.rainman.Model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import ch.post.education.apps.rainman.Exception.AttributeNotFoundException;
+
 public class Location {
 
     private int id;
