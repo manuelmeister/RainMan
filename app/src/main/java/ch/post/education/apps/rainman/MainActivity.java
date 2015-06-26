@@ -57,7 +57,7 @@ public class MainActivity extends BasicActivity {
         };
 
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-        swipeRefreshLayout.setProgressViewOffset(false,0,(int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45.5f, getResources().getDisplayMetrics())));
+        swipeRefreshLayout.setProgressViewEndTarget(false,(int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 58, getResources().getDisplayMetrics())));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
