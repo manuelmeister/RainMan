@@ -4,13 +4,12 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.opengl.Visibility;
+import android.view.View;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -123,11 +122,8 @@ public class MainActivity extends BasicActivity {
     @Override
     public void display(JSONObject jsonObject) {
         try {
-            TextView title_message = (TextView) findViewById(R.id.ErrorTitle);
-            title_message.setVisibility(View.INVISIBLE);
-
-            TextView message_message = (TextView) findViewById(R.id.message);
-            message_message.setVisibility(View.INVISIBLE);
+            textViewHelper(R.id.ErrorTitle,"",View.INVISIBLE);
+            textViewHelper(R.id.message, "", View.INVISIBLE);
 
             TextClock time = (TextClock) findViewById(R.id.time);
             time.setVisibility(View.VISIBLE);
@@ -151,7 +147,7 @@ public class MainActivity extends BasicActivity {
             }else {
                 rainbarText = "No Rain";
             }
-            barHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
+            textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
 
 
             FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
@@ -159,13 +155,13 @@ public class MainActivity extends BasicActivity {
             bar_pressure.setBackgroundColor(getResources().getColor(R.color.pressure_background));
             expand(bar_pressure, bar_pressure_height);
 
-            barHelper(R.id.bar_pressure_value, String.valueOf(forecast.getPressure()) + " hPa", View.VISIBLE);
+            textViewHelper(R.id.bar_pressure_value, String.valueOf(forecast.getPressure()) + " hPa", View.VISIBLE);
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
             int bar_temperature_height = getHeight(forecast.getTemperature().getDay() * 10);
             expand(bar_temperature, bar_temperature_height, forecast.getTemperature().getDay());
 
-            barHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
+            textViewHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
 
             ImageView weather_icon = (ImageView) findViewById(R.id.weather_icon);
             weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
@@ -217,32 +213,28 @@ public class MainActivity extends BasicActivity {
         return msg;
     }
 
-    public void showError(CharSequence title, String message){
+    public void showError(String title, String message){
         FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
         int bar_rain_height = getHeight(200);
         expand(bar_rain, bar_rain_height);
         bar_rain.setBackgroundColor(getResources().getColor(R.color.error));
-        barHelper(R.id.bar_rain_value, "", View.INVISIBLE);
+        textViewHelper(R.id.bar_rain_value, "", View.INVISIBLE);
 
         FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
         int bar_pressure_height = getHeight(200);
         expand(bar_pressure, bar_pressure_height);
         bar_pressure.setBackgroundColor(getResources().getColor(R.color.error));
-        barHelper(R.id.bar_pressure_value,"", View.INVISIBLE);
+        textViewHelper(R.id.bar_pressure_value, "", View.INVISIBLE);
 
         FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
         int bar_temperature_height = getHeight(200);
         expand(bar_temperature, bar_temperature_height);
         bar_temperature.setBackgroundColor(getResources().getColor(R.color.error));
-        barHelper(R.id.bar_temperature_value, "", View.INVISIBLE);
+        textViewHelper(R.id.bar_temperature_value, "", View.INVISIBLE);
 
-        TextView title_message = (TextView) findViewById(R.id.ErrorTitle);
-        title_message.setText(title);
-        title_message.setVisibility(View.VISIBLE);
+        textViewHelper(R.id.ErrorTitle, title, View.VISIBLE);
 
-        TextView message_message = (TextView) findViewById(R.id.message);
-        message_message.setText(message);
-        message_message.setVisibility(View.VISIBLE);
+        textViewHelper(R.id.message, message, View.VISIBLE);
 
         TextClock time = (TextClock) findViewById(R.id.time);
         time.setVisibility(View.INVISIBLE);
@@ -338,7 +330,12 @@ public class MainActivity extends BasicActivity {
         v.requestLayout();
     }
 
-    private void barHelper(int elem, String text, int visible){
+    /**
+     * @param elem Target element {@link #onCreate}
+     * @param text Content of the value
+     * @param visible One of {@link android.view.View#VISIBLE}, {@link android.view.View#INVISIBLE}, or {@link android.view.View#GONE}.
+     */
+    private void textViewHelper(int elem, String text, int visible){
         TextView element = (TextView) findViewById(elem);
         element.setText(text);
         element.setVisibility(View.VISIBLE);
