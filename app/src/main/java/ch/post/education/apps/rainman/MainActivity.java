@@ -57,7 +57,7 @@ public class MainActivity extends BasicActivity {
         };
 
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-        swipeRefreshLayout.setProgressViewOffset(false,0,108);
+        swipeRefreshLayout.setProgressViewOffset(false,0,(int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 45.5f, getResources().getDisplayMetrics())));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
@@ -132,7 +132,7 @@ public class MainActivity extends BasicActivity {
             TextView text_location = (TextView) findViewById(R.id.location);
             text_location.setText(location.getName());
 
-            frameLayoutHelper(R.id.bar_rain,getHeight(forecast.getRain() * 5),R.color.rain_background,false);
+            frameLayoutHelper(R.id.bar_rain, getHeight(forecast.getRain() * 5), R.color.rain_background, false);
 
             String rainbarText;
             if (forecast.getRain() != 0) {
