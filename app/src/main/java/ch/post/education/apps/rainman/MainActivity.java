@@ -44,11 +44,14 @@ public class MainActivity extends BasicActivity {
                 runTask();
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {}
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
 
-            public void onProviderEnabled(String provider) {}
+            public void onProviderEnabled(String provider) {
+            }
 
-            public void onProviderDisabled(String provider) {}
+            public void onProviderDisabled(String provider) {
+            }
 
 
         };
@@ -61,11 +64,8 @@ public class MainActivity extends BasicActivity {
                 getLocation();
             }
         });
-        
-        try{
-            getLocation();
-        }catch (Exception e){
-        }
+
+        getLocation();
     }
 
     @Override
@@ -77,11 +77,7 @@ public class MainActivity extends BasicActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        try{
-            getLocation();
-        }catch (Exception e){}
-
+        getLocation();
     }
 
     private void getLocation() {
@@ -89,7 +85,7 @@ public class MainActivity extends BasicActivity {
 
     }
 
-    public void runTask(){
+    public void runTask() {
         JSONAsyncTask task = new JSONAsyncTask(this);
         task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + cords.getLat() + "&lon=" + cords.getLon() + "&mode=json&units=metric&cnt=2");
         locationManager.removeUpdates(locationListener);
@@ -122,7 +118,7 @@ public class MainActivity extends BasicActivity {
     @Override
     public void display(JSONObject jsonObject) {
         try {
-            textViewHelper(R.id.ErrorTitle,"",View.INVISIBLE);
+            textViewHelper(R.id.ErrorTitle, "", View.INVISIBLE);
             textViewHelper(R.id.message, "", View.INVISIBLE);
 
             TextClock time = (TextClock) findViewById(R.id.time);
@@ -142,9 +138,9 @@ public class MainActivity extends BasicActivity {
             expand(bar_rain, bar_rain_height);
 
             String rainbarText;
-            if(forecast.getRain() != 0){
+            if (forecast.getRain() != 0) {
                 rainbarText = String.valueOf(forecast.getRain()) + " mm";
-            }else {
+            } else {
                 rainbarText = "No Rain";
             }
             textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
@@ -171,14 +167,14 @@ public class MainActivity extends BasicActivity {
         }
     }
 
-    public int getHeight(double height){
-        float pixels = (float)((height >= 60) ? height : 60);
-        return (int)(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pixels, getResources().getDisplayMetrics()));
+    public int getHeight(double height) {
+        float pixels = (float) ((height >= 60) ? height : 60);
+        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pixels, getResources().getDisplayMetrics()));
     }
 
-    public int getWeatherIcon(String weather){
-        int msg = 0;
-        switch (weather){
+    public int getWeatherIcon(String weather) {
+        int msg;
+        switch (weather) {
             case "clear sky":
                 msg = R.drawable.weather_sun;
                 break;
@@ -213,7 +209,7 @@ public class MainActivity extends BasicActivity {
         return msg;
     }
 
-    public void showError(String title, String message){
+    public void showError(String title, String message) {
         FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
         int bar_rain_height = getHeight(200);
         expand(bar_rain, bar_rain_height);
@@ -241,61 +237,38 @@ public class MainActivity extends BasicActivity {
         time.requestLayout();
     }
 
-    public int getBGColor(double temp){
+    public int getBGColor(double temp) {
         int color;
-        if(temp > 40){
+        if (temp > 40) {
             color = R.color.temperature_background_really_hot;
-        }else if(temp > 35){
+        } else if (temp > 35) {
             color = R.color.temperature_background_hot;
-        }else if(temp > 30){
+        } else if (temp > 30) {
             color = R.color.temperature_background_quite_warm;
-        }else if(temp > 25){
+        } else if (temp > 25) {
             color = R.color.temperature_background_warm;
-        }else if(temp > 21){
+        } else if (temp > 21) {
             color = R.color.temperature_background_quite_comfy;
-        }else if(temp > 18){
+        } else if (temp > 18) {
             color = R.color.temperature_background_comfy;
-        }else if(temp > 16){
+        } else if (temp > 16) {
             color = R.color.temperature_background_quite_normal;
-        }else if(temp > 10){
+        } else if (temp > 10) {
             color = R.color.temperature_background_normal;
-        }else if(temp > 5){
+        } else if (temp > 5) {
             color = R.color.temperature_background_quite_cold;
-        }else if(temp > 1){
+        } else if (temp > 1) {
             color = R.color.temperature_background_cold;
-        }else if(temp > -1){
+        } else if (temp > -1) {
             color = R.color.temperature_background_quite_freezing;
-        }else {
+        } else {
             color = R.color.temperature_background_freezing;
         }
         return getResources().getColor(color);
     }
 
     public static void expand(final View v, final int targetHeight) {
-        Animation a = new Animation()
-        {
-            @Override
-            protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = (int)(targetHeight * interpolatedTime);
-                v.requestLayout();
-            }
-
-            @Override
-            public boolean willChangeBounds() {
-                return true;
-            }
-        };
-
-        // 1dp/ms
-        a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)*3);
-        a.setInterpolator(new AccelerateDecelerateInterpolator());
-        v.startAnimation(a);
-        v.requestLayout();
-    }
-
-    public void expand(final View v, final int targetHeight,final double temp) {
-        Animation a = new Animation()
-        {
+        Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
                 v.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
@@ -309,15 +282,36 @@ public class MainActivity extends BasicActivity {
         };
 
         // 1dp/ms
-        a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)*3);
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
+        a.setInterpolator(new AccelerateDecelerateInterpolator());
+        v.startAnimation(a);
+        v.requestLayout();
+    }
+
+    public void expand(final View v, final int targetHeight, final double temp) {
+        Animation a = new Animation() {
+            @Override
+            protected void applyTransformation(float interpolatedTime, Transformation t) {
+                v.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
+                v.requestLayout();
+            }
+
+            @Override
+            public boolean willChangeBounds() {
+                return true;
+            }
+        };
+
+        // 1dp/ms
+        a.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
         a.setInterpolator(new AccelerateDecelerateInterpolator());
         v.startAnimation(a);
 
-        Integer colorFrom = getBGColor(targetHeight*0.002);
+        Integer colorFrom = getBGColor(targetHeight * 0.002);
         Integer colorMiddle = getBGColor(targetHeight * 0.03);
         Integer colorTo = getBGColor(targetHeight * 0.05);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom,colorMiddle, colorTo);
-        colorAnimation.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)*3);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorMiddle, colorTo);
+        colorAnimation.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
             @Override
@@ -331,14 +325,13 @@ public class MainActivity extends BasicActivity {
     }
 
     /**
-     * @param elem Target element {@link #onCreate}
-     * @param text Content of the value
+     * @param elem    Target element {@link #onCreate}
+     * @param text    Content of the value
      * @param visible One of {@link android.view.View#VISIBLE}, {@link android.view.View#INVISIBLE}, or {@link android.view.View#GONE}.
      */
-    private void textViewHelper(int elem, String text, int visible){
+    private void textViewHelper(int elem, String text, int visible) {
         TextView element = (TextView) findViewById(elem);
         element.setText(text);
-        element.setVisibility(View.VISIBLE);
-
+        element.setVisibility(visible);
     }
 }
