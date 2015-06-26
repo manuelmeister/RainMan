@@ -2,6 +2,7 @@ package ch.post.education.apps.rainman;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.content.Intent;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -111,6 +112,8 @@ public class MainActivity extends BasicActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            Intent intent = new Intent(this, SettingsActivity.class);
+            startActivity(intent);
             return true;
         }
 
