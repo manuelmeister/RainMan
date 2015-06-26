@@ -131,11 +131,7 @@ public class MainActivity extends BasicActivity {
             TextView text_location = (TextView) findViewById(R.id.location);
             text_location.setText(location.getName());
 
-            FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
-            int bar_rain_height = getHeight(forecast.getRain() * 5);
-            bar_rain.setBackgroundColor(getResources().getColor(R.color.rain_background));
-
-            expand(bar_rain, bar_rain_height);
+            frameLayoutHelper(R.id.bar_rain,getHeight(forecast.getRain() * 5),R.color.rain_background,false);
 
             String rainbarText;
             if (forecast.getRain() != 0) {
@@ -145,17 +141,13 @@ public class MainActivity extends BasicActivity {
             }
             textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
 
-
-            FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
-            int bar_pressure_height = getHeight(forecast.getPressure() / 6);
-            bar_pressure.setBackgroundColor(getResources().getColor(R.color.pressure_background));
-            expand(bar_pressure, bar_pressure_height);
+            frameLayoutHelper(R.id.bar_pressure, getHeight(forecast.getPressure() / 6), R.color.pressure_background, false);
 
             textViewHelper(R.id.bar_pressure_value, String.valueOf(forecast.getPressure()) + " hPa", View.VISIBLE);
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
             int bar_temperature_height = getHeight(forecast.getTemperature().getDay() * 10);
-            expand(bar_temperature, bar_temperature_height, forecast.getTemperature().getDay());
+            expand(bar_temperature, bar_temperature.getHeight(),bar_temperature_height, forecast.getTemperature().getDay());
 
             textViewHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
 
@@ -210,26 +202,16 @@ public class MainActivity extends BasicActivity {
     }
 
     public void showError(String title, String message) {
-        FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
-        int bar_rain_height = getHeight(200);
-        expand(bar_rain, bar_rain_height);
-        bar_rain.setBackgroundColor(getResources().getColor(R.color.error));
+        frameLayoutHelper(R.id.bar_rain,getHeight(200),R.color.error,false);
         textViewHelper(R.id.bar_rain_value, "", View.INVISIBLE);
 
-        FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
-        int bar_pressure_height = getHeight(200);
-        expand(bar_pressure, bar_pressure_height);
-        bar_pressure.setBackgroundColor(getResources().getColor(R.color.error));
+        frameLayoutHelper(R.id.bar_pressure, getHeight(200), R.color.error, false);
         textViewHelper(R.id.bar_pressure_value, "", View.INVISIBLE);
 
-        FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
-        int bar_temperature_height = getHeight(200);
-        expand(bar_temperature, bar_temperature_height);
-        bar_temperature.setBackgroundColor(getResources().getColor(R.color.error));
+        frameLayoutHelper(R.id.bar_temperature, getHeight(200), R.color.error, false);
         textViewHelper(R.id.bar_temperature_value, "", View.INVISIBLE);
 
         textViewHelper(R.id.ErrorTitle, title, View.VISIBLE);
-
         textViewHelper(R.id.message, message, View.VISIBLE);
 
         TextClock time = (TextClock) findViewById(R.id.time);
@@ -267,7 +249,7 @@ public class MainActivity extends BasicActivity {
         return getResources().getColor(color);
     }
 
-    public static void expand(final View v, final int targetHeight) {
+    public static void expand(final View v, final int initalHeight, final int targetHeight) {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
@@ -288,7 +270,7 @@ public class MainActivity extends BasicActivity {
         v.requestLayout();
     }
 
-    public void expand(final View v, final int targetHeight, final double temp) {
+    public void expand(final View v, final int initalHeight, final int targetHeight, final double temp) {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
@@ -333,5 +315,18 @@ public class MainActivity extends BasicActivity {
         TextView element = (TextView) findViewById(elem);
         element.setText(text);
         element.setVisibility(visible);
+    }
+
+    /**
+     * @param elem                   Target element {@link #onCreate}
+     * @param desired_element_height Height of the bar
+     * @param color                  Color
+     * @param error                  If the frame transitions to an error
+     */
+    private void frameLayoutHelper(int elem, int desired_element_height, int color, boolean error) {
+        FrameLayout element = (FrameLayout) findViewById(elem);
+        int inital_element_height = element.getLayoutParams().height;
+        element.setBackgroundColor(getResources().getColor(color));
+        expand(element, inital_element_height, desired_element_height);
     }
 }
