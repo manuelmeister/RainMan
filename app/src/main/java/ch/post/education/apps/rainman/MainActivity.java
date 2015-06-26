@@ -4,6 +4,7 @@ import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.opengl.Visibility;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
@@ -54,7 +55,7 @@ public class MainActivity extends BasicActivity {
         };
 
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
             public void onRefresh() {
@@ -142,31 +143,29 @@ public class MainActivity extends BasicActivity {
             int bar_rain_height = getHeight(forecast.getRain() * 5);
             bar_rain.setBackgroundColor(getResources().getColor(R.color.rain_background));
 
+            expand(bar_rain, bar_rain_height);
 
-
-            expand(bar_rain,bar_rain_height);
-
-            TextView bar_rain_value = (TextView) findViewById(R.id.bar_rain_value);
+            String rainbarText;
             if(forecast.getRain() != 0){
-                bar_rain_value.setText(String.valueOf(forecast.getRain()) + " mm");
+                rainbarText = String.valueOf(forecast.getRain()) + " mm";
             }else {
-                bar_rain_value.setText(R.string.no_rain);
+                rainbarText = "No Rain";
             }
+            barHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
+
 
             FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
             int bar_pressure_height = getHeight(forecast.getPressure() / 6);
             bar_pressure.setBackgroundColor(getResources().getColor(R.color.pressure_background));
             expand(bar_pressure, bar_pressure_height);
 
-            TextView bar_pressure_value = (TextView) findViewById(R.id.bar_pressure_value);
-            bar_pressure_value.setText(String.valueOf(forecast.getPressure()) + " hPa");
+            barHelper(R.id.bar_pressure_value, String.valueOf(forecast.getPressure()) + " hPa", View.VISIBLE);
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
             int bar_temperature_height = getHeight(forecast.getTemperature().getDay() * 10);
             expand(bar_temperature, bar_temperature_height, forecast.getTemperature().getDay());
 
-            TextView bar_temperature_value = (TextView) findViewById(R.id.bar_temperature_value);
-            bar_temperature_value.setText(String.valueOf(forecast.getTemperature().getDay()) + " °C");
+            barHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
 
             ImageView weather_icon = (ImageView) findViewById(R.id.weather_icon);
             weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
@@ -220,19 +219,22 @@ public class MainActivity extends BasicActivity {
 
     public void showError(CharSequence title, String message){
         FrameLayout bar_rain = (FrameLayout) findViewById(R.id.bar_rain);
-        int bar_rain_height = getHeight(300);
+        int bar_rain_height = getHeight(200);
         expand(bar_rain, bar_rain_height);
         bar_rain.setBackgroundColor(getResources().getColor(R.color.error));
+        barHelper(R.id.bar_rain_value, "", View.INVISIBLE);
 
         FrameLayout bar_pressure = (FrameLayout) findViewById(R.id.bar_pressure);
-        int bar_pressure_height = getHeight(300);
+        int bar_pressure_height = getHeight(200);
         expand(bar_pressure, bar_pressure_height);
         bar_pressure.setBackgroundColor(getResources().getColor(R.color.error));
+        barHelper(R.id.bar_pressure_value,"", View.INVISIBLE);
 
         FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
-        int bar_temperature_height = getHeight(300);
+        int bar_temperature_height = getHeight(200);
         expand(bar_temperature, bar_temperature_height);
         bar_temperature.setBackgroundColor(getResources().getColor(R.color.error));
+        barHelper(R.id.bar_temperature_value, "", View.INVISIBLE);
 
         TextView title_message = (TextView) findViewById(R.id.ErrorTitle);
         title_message.setText(title);
@@ -334,5 +336,12 @@ public class MainActivity extends BasicActivity {
         });
         colorAnimation.start();
         v.requestLayout();
+    }
+
+    private void barHelper(int elem, String text, int visible){
+        TextView element = (TextView) findViewById(elem);
+        element.setText(text);
+        element.setVisibility(View.VISIBLE);
+
     }
 }
