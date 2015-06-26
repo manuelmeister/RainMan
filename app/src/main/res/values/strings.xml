@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">WeatherMeter</string>
+    <string name="app_name">RainMan</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
