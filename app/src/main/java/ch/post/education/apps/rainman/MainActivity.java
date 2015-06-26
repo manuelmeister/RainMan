@@ -20,7 +20,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -32,8 +31,8 @@ import ch.post.education.apps.rainman.Model.Location;
 public class MainActivity extends BasicActivity {
 
     public Coordinates cords;
-    LocationManager locationManager;
-    LocationListener locationListener;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,7 +70,7 @@ public class MainActivity extends BasicActivity {
             showError("Error", "not found");
         }catch (Exception e){
         }
-}
+    }
 
     @Override
     protected void onPause() {
@@ -92,6 +91,7 @@ public class MainActivity extends BasicActivity {
 
     private void getLocation() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+
     }
 
     public void runTask(){
