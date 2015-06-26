@@ -1,9 +1,12 @@
 package ch.post.education.apps.rainman;
 
+import android.animation.ArgbEvaluator;
+import android.animation.ValueAnimator;
 import android.graphics.drawable.Drawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
@@ -17,6 +20,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +56,22 @@ public class MainActivity extends BasicActivity {
 
 
         };
-    }
+
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener(){
+
+            @Override
+            public void onRefresh() {
+                getLocation();
+            }
+        });
+        
+        try{
+            getLocation(this);
+            showError("Error", "not found");
+        }catch (Exception e){
+        }
+}
 
     @Override
     protected void onPause() {
@@ -73,14 +92,14 @@ public class MainActivity extends BasicActivity {
 
     private void getLocation() {
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
     }
 
     public void runTask(){
         JSONAsyncTask task = new JSONAsyncTask(this);
         task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + cords.getLat() + "&lon=" + cords.getLon() + "&mode=json&units=metric&cnt=2");
         locationManager.removeUpdates(locationListener);
-
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -275,8 +294,7 @@ public class MainActivity extends BasicActivity {
         {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = (int)(targetHeight * interpolatedTime);
-                v.setBackgroundColor(getBGColor(temp * interpolatedTime));
+                v.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -290,6 +308,21 @@ public class MainActivity extends BasicActivity {
         a.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)*3);
         a.setInterpolator(new AccelerateDecelerateInterpolator());
         v.startAnimation(a);
+
+        Integer colorFrom = getBGColor(targetHeight*0.002);
+        Integer colorMiddle = getBGColor(targetHeight * 0.03);
+        Integer colorTo = getBGColor(targetHeight * 0.05);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom,colorMiddle, colorTo);
+        colorAnimation.setDuration((int)(targetHeight / v.getContext().getResources().getDisplayMetrics().density)*3);
+        colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+            @Override
+            public void onAnimationUpdate(ValueAnimator animator) {
+                v.setBackgroundColor((Integer) animator.getAnimatedValue());
+            }
+
+        });
+        colorAnimation.start();
         v.requestLayout();
     }
 }
