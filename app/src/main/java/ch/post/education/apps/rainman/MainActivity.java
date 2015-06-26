@@ -5,6 +5,7 @@ import android.animation.ValueAnimator;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.util.Log;
 import android.view.View;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -168,37 +169,23 @@ public class MainActivity extends BasicActivity {
 
     public int getWeatherIcon(String weather) {
         int msg;
-        switch (weather) {
-            case "clear sky":
-                msg = R.drawable.weather_sun;
-                break;
-            case "few clouds":
-                msg = R.drawable.weather_partly_cloudy_day;
-                break;
-            case "scattered clouds":
-                msg = R.drawable.weather_clouds;
-                break;
-            case "broken clouds":
-                msg = R.drawable.weather_clouds;
-                break;
-            case "shower rain":
-                msg = R.drawable.weather_rain;
-                break;
-            case "rain":
-                msg = R.drawable.weather_rainy_weather;
-                break;
-            case "thunderstorm":
-                msg = R.drawable.weather_storm;
-                break;
-            case "snow":
-                msg = R.drawable.weather_snow;
-                break;
-            case "mist":
-                msg = R.drawable.weather_fog_day;
-                break;
-            default:
-                msg = R.drawable.weather_sun;
-                break;
+        Log.v("Weather",weather);
+        if (weather.equals("Clear")) {
+            msg = R.drawable.weather_sun;
+        } else if (weather.equals("Clouds")) {
+            msg = R.drawable.weather_clouds;
+        } else if (weather.equals("Shower Rain")) {
+            msg = R.drawable.weather_rain;
+        } else if (weather.equals("Rain")) {
+            msg = R.drawable.weather_rainy_weather;
+        } else if (weather.equals("Thunderstorm")) {
+            msg = R.drawable.weather_storm;
+        } else if (weather.equals("Snow")) {
+            msg = R.drawable.weather_snow;
+        } else if (weather.equals("Mist")) {
+            msg = R.drawable.weather_fog_day;
+        } else {
+            msg = R.drawable.weather_sun;
         }
         return msg;
     }
