@@ -28,8 +28,8 @@ import ch.post.education.apps.rainman.Model.Location;
 public class MainActivity extends BasicActivity {
 
     public Coordinates cords;
-    LocationManager locationManager;
-    LocationListener locationListener;
+    private LocationManager locationManager;
+    private LocationListener locationListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,7 +80,6 @@ public class MainActivity extends BasicActivity {
         JSONAsyncTask task = new JSONAsyncTask(this);
         task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + cords.getLat() + "&lon=" + cords.getLon() + "&mode=json&units=metric&cnt=2");
         locationManager.removeUpdates(locationListener);
-
     }
 
     @Override
