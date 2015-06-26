@@ -2,6 +2,7 @@ package ch.post.education.apps.rainman;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.view.View;
@@ -203,13 +204,17 @@ public class MainActivity extends BasicActivity {
     }
 
     public void showError(String title, String message) {
-        frameLayoutHelper(R.id.bar_rain,getHeight(200),R.color.error,false);
+        Point dimen = new Point();
+        getWindowManager().getDefaultDisplay().getSize(dimen);
+        int height = dimen.x/3;
+
+        frameLayoutHelper(R.id.bar_rain,height,R.color.error,false);
         textViewHelper(R.id.bar_rain_value, "", View.INVISIBLE);
 
-        frameLayoutHelper(R.id.bar_pressure, getHeight(200), R.color.error, false);
+        frameLayoutHelper(R.id.bar_pressure, height, R.color.error, false);
         textViewHelper(R.id.bar_pressure_value, "", View.INVISIBLE);
 
-        frameLayoutHelper(R.id.bar_temperature, getHeight(200), R.color.error, false);
+        frameLayoutHelper(R.id.bar_temperature, height, R.color.error, false);
         textViewHelper(R.id.bar_temperature_value, "", View.INVISIBLE);
 
         textViewHelper(R.id.ErrorTitle, title, View.VISIBLE);
@@ -254,7 +259,7 @@ public class MainActivity extends BasicActivity {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
+                v.getLayoutParams().height = (int) (initalHeight + (targetHeight-initalHeight) * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -275,7 +280,7 @@ public class MainActivity extends BasicActivity {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = (int) (targetHeight * interpolatedTime);
+                v.getLayoutParams().height = (int) (initalHeight + (targetHeight-initalHeight) * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -296,12 +301,10 @@ public class MainActivity extends BasicActivity {
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorMiddle, colorTo);
         colorAnimation.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
                 v.setBackgroundColor((Integer) animator.getAnimatedValue());
             }
-
         });
         colorAnimation.start();
         v.requestLayout();
