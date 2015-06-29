@@ -3,7 +3,8 @@
     <color name="error">#a2030303</color>
 
     <color name="rain_background">#A2006CFF</color>
-    <color name="pressure_background">#a0000000</color>
+    <color name="rain_background_fail">#a2363636</color>
+    <color name="pressure_background">#9fa704d6</color>
 
     <color name="temperature_background_freezing">#a0007eff</color>
     <color name="temperature_background_quite_freezing">#a000c1ff</color>
