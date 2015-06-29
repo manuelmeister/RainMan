@@ -162,7 +162,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             if (forecast.getRain() != 0) {
                 rainbarText = String.valueOf(forecast.getRain()) + " mm";
             } else {
-                rainbarText = "No Rain";
+                rainbarText = getResources().getString(R.string.no_rain);
             }
             textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
 
