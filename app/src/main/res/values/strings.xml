@@ -1,15 +1,9 @@
 <resources>
     <string name="app_name">RainMan</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
     <item name="fill" format="float" type="dimen">0.2</item>
     <item name="full" format="float" type="dimen">0.8</item>
-    <string name="title_activity_rain_meter">RainMeter</string>
-    <string name="Rain.Main.Buttons.Current">Current rain amount</string>
-    <string name="Rain.Main.Buttons.Today">Total rain today</string>
-    <string name="Rain.Main.Buttons.Sun">Sun in minutes</string>
-    <string name="title_activity_container">Rain</string>
 
     <string name="title_section_currently">Currently</string>
     <string name="title_section_today">Today</string>
@@ -29,12 +23,6 @@
     <string name="pref_searchLocation">Search</string>
     <string name="pref_searchLocation_summary">Search your city by name</string>
     <string name="pref_searchLocationList_summary">Tap to select city from suggestions</string>
-
-    <string name="prefUseGPS">prefUseGPS</string>
-    <string name="prefAuto">prefAuto</string>
-    <string name="prefManually">prefManually</string>
-    <string name="prefLocation">prefLocation</string>
-    <string name="prefinput_Location">inputLocation</string>
     <string name="pref_manually_disabled">Please disable GPS to use this feature!</string>
     <string name="not_loaded">not loaded</string>
 </resources>

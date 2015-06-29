@@ -3,4 +3,10 @@
     <integer name="bar_weight">1</integer>
     <string name="bar_title_margin">4dp</string>
     <integer name="bar_title_fontSize">22</integer>
+
+    <string name="prefUseGPS">prefUseGPS</string>
+    <string name="prefAuto">prefAuto</string>
+    <string name="prefManually">prefManually</string>
+    <string name="prefLocation">prefLocation</string>
+    <string name="prefinput_Location">inputLocation</string>
 </resources>
