@@ -63,8 +63,7 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 catManually.setEnabled(!((boolean) newValue));
-                editor.putBoolean("useGPS", (boolean) newValue);
-                editor.commit();
+                editor.putBoolean("useGPS", (boolean) newValue).apply();
                 return true;
             }
         });
@@ -97,9 +96,8 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
                 for (Map.Entry<String, String> location : locations.entrySet()) {
                     if (location.getKey().equals(newValue)) {
                         locationList.setTitle(location.getValue());
-                        editor.putString("locationID", location.getKey());
-                        editor.putString("locationName", location.getValue());
-                        editor.commit();
+                        editor.putString("locationID", location.getKey()).apply();
+                        editor.putString("locationName", location.getValue()).apply();
                         break;
                     }
                 }
@@ -136,6 +134,8 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
             locationList.setEntries(keys);
             locationList.setEntryValues(values);
             locationList.setValueIndex(0);
+            editor.putString("locationID", locationList.getValue()).apply();
+            editor.putString("locationName", locationList.getEntry().toString()).apply();
             locationList.setTitle(locationList.getEntry());
             dialog.dismiss();
         } catch (Exception e) {
