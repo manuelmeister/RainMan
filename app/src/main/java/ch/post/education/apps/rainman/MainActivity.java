@@ -3,6 +3,7 @@ package ch.post.education.apps.rainman;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -35,16 +36,25 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     private LocationManager locationManager;
     private LocationListener locationListener;
 
-    @Override
+    public String query = "";
+
+    private SharedPreferences settings;
+    private SharedPreferences.Editor editor;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        settings = getSharedPreferences("RainMan", MODE_PRIVATE);
+        editor = settings.edit();
+
         this.locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
         this.locationListener = new LocationListener() {
 
             @Override
             public void onLocationChanged(android.location.Location location) {
                 cords = new Coordinates(location.getLongitude(), location.getLatitude());
+                query = "lat=" + cords.getLat() + "&lon=" + cords.getLon() ;
                 runTask();
             }
 
@@ -86,13 +96,17 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     private void getLocation() {
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-
+        if(settings.getBoolean("useGPS",true)){
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+        }else {
+            query = "id=" + settings.getString("locationID","2661552");
+            runTask();
+        }
     }
 
     public void runTask() {
         JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?lat=" + cords.getLat() + "&lon=" + cords.getLon() + "&mode=json&units=metric&cnt=2");
+        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=1");
         locationManager.removeUpdates(locationListener);
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
         swipeRefreshLayout.setRefreshing(false);
