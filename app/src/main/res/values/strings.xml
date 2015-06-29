@@ -22,4 +22,11 @@
     <string name="location">Location</string>
     <string name="no_rain">No Rain</string>
     <string name="Error">Large Text</string>
+    <string name="pref_auto">Automatically</string>
+    <string name="pref_useGPS">Use GPS</string>
+    <string name="pref_useGPS_summary">Uses GPS to find you location</string>
+    <string name="pref_manually">Manually</string>
+    <string name="pref_searchLocation">Search</string>
+    <string name="pref_searchLocation_summary">Search your city by name</string>
+    <string name="pref_searchLocationList_summary">Tap to select city from suggestions</string>
 </resources>
