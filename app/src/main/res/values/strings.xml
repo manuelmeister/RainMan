@@ -29,4 +29,10 @@
     <string name="pref_searchLocation">Search</string>
     <string name="pref_searchLocation_summary">Search your city by name</string>
     <string name="pref_searchLocationList_summary">Tap to select city from suggestions</string>
+
+    <string name="prefUseGPS">prefUseGPS</string>
+    <string name="prefAuto">prefAuto</string>
+    <string name="prefManually">prefManually</string>
+    <string name="prefLocation">prefLocation</string>
+    <string name="prefinput_Location">inputLocation</string>
 </resources>

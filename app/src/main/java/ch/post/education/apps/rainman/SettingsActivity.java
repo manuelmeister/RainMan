@@ -45,14 +45,9 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
     }
 
     private void prefLocationAuto(){
-        PreferenceCategory catAuto = new PreferenceCategory(this);
-        catAuto.setTitle(R.string.pref_auto);
-        getPreferenceScreen().addPreference(catAuto);
+        catManually = (PreferenceCategory) findPreference(getResources().getString(R.string.prefManually));
 
-        CheckBoxPreference useGPS = new CheckBoxPreference(this);
-        useGPS.setTitle(R.string.pref_useGPS);
-        useGPS.setSummary(R.string.pref_useGPS_summary);
-        useGPS.setDefaultValue(true);
+        CheckBoxPreference useGPS = (CheckBoxPreference) findPreference(getResources().getString(R.string.prefUseGPS));
         useGPS.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -61,20 +56,11 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
             }
         });
 
-        catAuto.addPreference(useGPS);
-        getPreferenceScreen().addPreference(catAuto);
     }
 
     private void prefLocationManually(){
-        catManually = new PreferenceCategory(this);
-        catManually.setTitle(R.string.pref_manually);
-        catManually.setEnabled(false);
-        getPreferenceScreen().addPreference(catManually);
 
-        EditTextPreference searchLocation = new EditTextPreference(this);
-        searchLocation.setTitle(R.string.pref_searchLocation);
-        searchLocation.setSummary(R.string.pref_searchLocation_summary);
-
+        EditTextPreference searchLocation = (EditTextPreference) findPreference(getResources().getString(R.string.prefinput_Location));
         searchLocation.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
@@ -83,10 +69,7 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
             }
         });
 
-        catManually.addPreference(searchLocation);
-
-        locationList = new ListPreference(this);
-        locationList.setKey("pref_location");
+        locationList = (ListPreference) findPreference(getResources().getString(R.string.prefLocation));
 
         locations.put("Bern, CH", "2661552");
         locations.put("London, GB", "2643743");
@@ -97,12 +80,11 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
 
         locationList.setEntries(keys);
         locationList.setEntryValues(values);
-        locationList.setSummary(R.string.pref_searchLocationList_summary);
         locationList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 for (Map.Entry<String, String> location : locations.entrySet()) {
-                    if(location.getValue().equals(newValue)){
+                    if (location.getValue().equals(newValue)) {
                         locationList.setTitle(location.getKey());
                         break;
                     }
@@ -113,8 +95,6 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
         });
         locationList.setValueIndex(0);
         locationList.setTitle(locationList.getEntry());
-
-        catManually.addPreference(locationList);
     }
 
     private void getSuggestions(String value) {
@@ -141,9 +121,6 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
             locationList.setEntryValues(values);
             locationList.setValueIndex(0);
             locationList.setTitle(locationList.getEntry());
-
-            catManually.removePreference(locationList);
-            catManually.addPreference(locationList);
 
         }catch (Exception e){
             Log.v("Search",e.getMessage());

@@ -1,4 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <PreferenceCategory
+        android:title="@string/pref_auto"
+        android:key="@string/prefAuto">
+        <CheckBoxPreference
+            android:title="@string/pref_useGPS"
+            android:summary="@string/pref_useGPS_summary"
+            android:key="@string/prefUseGPS"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:title="@string/pref_manually"
+        android:key="@string/prefManually">
+            <EditTextPreference
+                android:title="@string/pref_searchLocation"
+                android:summary="@string/pref_searchLocation_summary"
+                android:key="@string/prefinput_Location"/>
+            <ListPreference
+                android:key="@string/prefLocation"
+                android:summary="@string/pref_searchLocationList_summary"/>
+    </PreferenceCategory>
 </PreferenceScreen>
