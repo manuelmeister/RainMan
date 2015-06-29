@@ -2,27 +2,20 @@
     <string name="app_name">RainMan</string>
 
     <string name="action_settings">Settings</string>
-    <item name="fill" format="float" type="dimen">0.2</item>
-    <item name="full" format="float" type="dimen">0.8</item>
 
-    <string name="title_section_currently">Currently</string>
-    <string name="title_section_today">Today</string>
-    <string name="title_section_sun">Sun</string>
-    <string name="title_activity_main">Rain</string>
     <string name="rain">Rain</string>
     <string name="pressure">Pressure</string>
     <string name="temparature">Temp</string>
     <string name="weather_icon">Weather icon</string>
     <string name="location">Location</string>
     <string name="no_rain">No Rain</string>
-    <string name="Error">Large Text</string>
+    <string name="Error">Error</string>
     <string name="pref_auto">Automatically</string>
     <string name="pref_useGPS">Use GPS</string>
-    <string name="pref_useGPS_summary">Uses GPS to find you location</string>
+    <string name="pref_useGPS_summary">Uses GPS to find your location</string>
     <string name="pref_manually">Manually</string>
     <string name="pref_searchLocation">Search</string>
     <string name="pref_searchLocation_summary">Search your city by name</string>
     <string name="pref_searchLocationList_summary">Tap to select city from suggestions</string>
-    <string name="pref_manually_disabled">Please disable GPS to use this feature!</string>
     <string name="not_loaded">not loaded</string>
 </resources>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">RainMan</string>
+    <string name="action_settings">Einstellungen</string>
+    <string name="location">Standort</string>
+    <string name="no_rain">Kein Regen</string>
+    <string name="not_loaded">Nicht geladen</string>
+    <string name="pref_auto">Automatisch</string>
+    <string name="pref_manually">Manuell</string>
+    <string name="pref_searchLocation">Suche</string>
+    <string name="pref_useGPS">GPS verwenden</string>
+    <string name="pref_useGPS_summary">Verwendet GPS um Ihren Standort zu finden</string>
+    <string name="pressure">Druck</string>
+    <string name="rain">Regen</string>
+    <string name="temparature">Temp.</string>
+    <string name="weather_icon">Wettersymbol</string>
+    <string name="pref_searchLocation_summary">Standort mit Name finden</string>
+    <string name="pref_searchLocationList_summary">Standort aus Vorschlägen auswählen</string>
+</resources>
