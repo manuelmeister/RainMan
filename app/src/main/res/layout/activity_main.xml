@@ -92,7 +92,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4 mm"
+                        android:text="@string/not_loaded"
                         android:id="@+id/bar_rain_value"
                         android:layout_gravity="center_horizontal|top"
                         android:visibility="visible"
@@ -127,7 +127,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4 mm"
+                        android:text="@string/not_loaded"
                         android:id="@+id/bar_pressure_value"
                         android:layout_gravity="center_horizontal|top"
                         android:visibility="visible"
@@ -162,7 +162,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4 mm"
+                        android:text="@string/not_loaded"
                         android:id="@+id/bar_temperature_value"
                         android:layout_gravity="center_horizontal|top"
                         android:visibility="visible"

@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
+        swipeRefreshLayout.setRefreshing(true);
         getLocation();
     }
 
@@ -147,7 +149,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             time.requestLayout();
 
             Location location = new Location(jsonObject.getJSONObject("city"));
-            Forecast forecast = new Forecast(jsonObject.getJSONArray("list").getJSONObject(7));
+            Forecast forecast = new Forecast(jsonObject.getJSONArray("list").getJSONObject(0));
 
             TextView text_location = (TextView) findViewById(R.id.location);
             text_location.setText(location.getName());
