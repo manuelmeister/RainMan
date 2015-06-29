@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
     public void runTask() {
         JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=1");
+        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=10");
         locationManager.removeUpdates(locationListener);
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
         swipeRefreshLayout.setRefreshing(false);
@@ -147,12 +147,14 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             time.requestLayout();
 
             Location location = new Location(jsonObject.getJSONObject("city"));
-            Forecast forecast = new Forecast(jsonObject.getJSONArray("list").getJSONObject(0));
+            Forecast forecast = new Forecast(jsonObject.getJSONArray("list").getJSONObject(7));
 
             TextView text_location = (TextView) findViewById(R.id.location);
             text_location.setText(location.getName());
 
-            frameLayoutHelper(R.id.bar_rain, getHeight(forecast.getRain() * 5), R.color.rain_background, false);
+            double x = forecast.getRain();
+            int h = (int) ((2*(Math.pow(x,2)))/(Math.pow(x,2) + 1)*150);
+            frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background, false);
 
             String rainbarText;
             if (forecast.getRain() != 0) {
@@ -162,12 +164,12 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             }
             textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
 
-            frameLayoutHelper(R.id.bar_pressure, getHeight(forecast.getPressure() / 6), R.color.pressure_background, false);
+            frameLayoutHelper(R.id.bar_pressure, getPXHeight(forecast.getPressure() / 6), R.color.pressure_background, false);
 
             textViewHelper(R.id.bar_pressure_value, String.valueOf(forecast.getPressure()) + " hPa", View.VISIBLE);
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
-            int bar_temperature_height = getHeight(forecast.getTemperature().getDay() * 10);
+            int bar_temperature_height = getPXHeight(forecast.getTemperature().getDay() * 10);
             expand(bar_temperature, bar_temperature.getHeight(),bar_temperature_height, forecast.getTemperature().getDay());
 
             textViewHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
@@ -180,9 +182,13 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         }
     }
 
-    public int getHeight(double height) {
+    public int getPXHeight(double height) {
         float pixels = (float) ((height >= 60) ? height : 60);
-        return (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, pixels, getResources().getDisplayMetrics()));
+        return (int) (pixels * getResources().getDisplayMetrics().density);
+    }
+
+    public int getDIPHeight(float height) {
+        return (int) (height / getResources().getDisplayMetrics().density);
     }
 
     public int getWeatherIcon(String weather) {
@@ -300,10 +306,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         a.setInterpolator(new AccelerateDecelerateInterpolator());
         v.startAnimation(a);
 
-        Integer colorFrom = getBGColor(targetHeight * 0.002);
-        Integer colorMiddle = getBGColor(targetHeight * 0.03);
-        Integer colorTo = getBGColor(targetHeight * 0.05);
-        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorMiddle, colorTo);
+        Integer colorFrom = getBGColor(getDIPHeight(initalHeight)/10);
+        Integer colorTo = getBGColor(temp);
+        ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override

@@ -29,7 +29,9 @@
                 android:text="@string/location"
                 android:id="@+id/location"
                 android:layout_below="@+id/weather_icon"
-                android:layout_centerHorizontal="true" />
+                android:layout_centerHorizontal="true"
+                android:importantForAccessibility="yes"
+                android:singleLine="true" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -40,16 +42,20 @@
                 android:layout_below="@+id/location"
                 android:layout_centerHorizontal="true"
                 android:textSize="60dp"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:singleLine="true" />
 
             <TextClock
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/time"
                 android:layout_gravity="center_horizontal"
-                android:textSize="60sp"
+                android:textSize="50sp"
                 android:layout_centerHorizontal="true"
-                android:layout_below="@+id/location" />
+                android:layout_below="@+id/location"
+                android:format12Hour="HH:MM"
+                android:format24Hour="HH:MM"
+                android:importantForAccessibility="yes" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -92,7 +98,9 @@
                         android:visibility="visible"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="-8dp"
-                        android:textColor="@color/text_white" />
+                        android:textColor="@color/text_white"
+                        android:importantForAccessibility="yes"
+                        android:singleLine="true" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -102,7 +110,9 @@
                         android:layout_gravity="center_horizontal|bottom"
                         android:textSize="22sp"
                         android:textColor="@color/text_white"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginBottom="4dp"
+                        android:importantForAccessibility="yes"
+                        android:singleLine="true" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -123,7 +133,9 @@
                         android:visibility="visible"
                         android:layout_marginTop="8dp"
                         android:layout_marginBottom="-8dp"
-                        android:textColor="@color/text_white" />
+                        android:textColor="@color/text_white"
+                        android:importantForAccessibility="yes"
+                        android:singleLine="true" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -133,7 +145,9 @@
                         android:layout_gravity="center_horizontal|bottom"
                         android:textSize="22sp"
                         android:textColor="@color/text_white"
-                        android:layout_marginBottom="4dp" />
+                        android:layout_marginBottom="4dp"
+                        android:importantForAccessibility="yes"
+                        android:singleLine="true" />
                 </FrameLayout>
 
                 <FrameLayout
@@ -153,7 +167,9 @@
                         android:layout_gravity="center_horizontal|top"
                         android:visibility="visible"
                         android:layout_marginTop="8dp"
-                        android:layout_marginBottom="-8dp" />
+                        android:layout_marginBottom="-8dp"
+                        android:importantForAccessibility="yes"
+                        android:singleLine="true" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -162,7 +178,9 @@
                         android:id="@+id/bar_temperature_title"
                         android:layout_gravity="center_horizontal|bottom"
                         android:layout_marginBottom="4dp"
-                        android:textSize="22sp" />
+                        android:textSize="22sp"
+                        android:importantForAccessibility="yes"
+                        android:singleLine="true" />
 
                 </FrameLayout>
             </LinearLayout>
