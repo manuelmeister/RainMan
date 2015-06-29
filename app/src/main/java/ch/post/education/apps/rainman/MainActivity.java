@@ -156,13 +156,14 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
             double x = forecast.getRain();
             int h = (int) ((2*(Math.pow(x,2)))/(Math.pow(x,2) + 1)*150);
-            frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background, false);
 
             String rainbarText;
             if (forecast.getRain() != 0) {
                 rainbarText = String.valueOf(forecast.getRain()) + " mm";
+                frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background, false);
             } else {
                 rainbarText = getResources().getString(R.string.no_rain);
+                frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background_fail, false);
             }
             textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
 
