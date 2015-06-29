@@ -1,5 +1,7 @@
 package ch.post.education.apps.rainman;
 
+import android.app.ProgressDialog;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
 import android.preference.EditTextPreference;
@@ -31,34 +33,45 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
 
     PreferenceCategory catManually;
     ListPreference locationList;
+    SharedPreferences settings;
+    SharedPreferences.Editor editor;
+    ProgressDialog dialog;
 
-    HashMap<String,String> locations = new HashMap<String, String>();
+    HashMap<String, String> locations = new HashMap<String, String>();
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
+        dialog = new ProgressDialog(this);
+        settings = getSharedPreferences("RainMan", MODE_PRIVATE);
+        editor = settings.edit();
         addPreferencesFromResource(R.xml.pref_location);
         prefLocationAuto();
         prefLocationManually();
         //setupSimplePreferencesScreen();
     }
 
-    private void prefLocationAuto(){
+    private void prefLocationAuto() {
         catManually = (PreferenceCategory) findPreference(getResources().getString(R.string.prefManually));
 
+        catManually.setEnabled(!settings.getBoolean("useGPS", true));
+
         CheckBoxPreference useGPS = (CheckBoxPreference) findPreference(getResources().getString(R.string.prefUseGPS));
+        useGPS.setChecked(settings.getBoolean("useGPS", true));
         useGPS.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 catManually.setEnabled(!((boolean) newValue));
+                editor.putBoolean("useGPS", (boolean) newValue);
+                editor.commit();
                 return true;
             }
         });
 
     }
 
-    private void prefLocationManually(){
+    private void prefLocationManually() {
 
         EditTextPreference searchLocation = (EditTextPreference) findPreference(getResources().getString(R.string.prefinput_Location));
         searchLocation.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
@@ -71,21 +84,22 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
 
         locationList = (ListPreference) findPreference(getResources().getString(R.string.prefLocation));
 
-        locations.put("Bern, CH", "2661552");
-        locations.put("London, GB", "2643743");
-        locations.put("Stockholm, SE","2673730");
+        locations.put(settings.getString("locationID", "2661552"), settings.getString("locationName", "Bern, CH"));
 
         CharSequence[] keys = locations.keySet().toArray(new CharSequence[locations.size()]);
         CharSequence[] values = locations.values().toArray(new CharSequence[locations.size()]);
 
-        locationList.setEntries(keys);
-        locationList.setEntryValues(values);
+        locationList.setEntries(values);
+        locationList.setEntryValues(keys);
         locationList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
             public boolean onPreferenceChange(Preference preference, Object newValue) {
                 for (Map.Entry<String, String> location : locations.entrySet()) {
-                    if (location.getValue().equals(newValue)) {
-                        locationList.setTitle(location.getKey());
+                    if (location.getKey().equals(newValue)) {
+                        locationList.setTitle(location.getValue());
+                        editor.putString("locationID", location.getKey());
+                        editor.putString("locationName", location.getValue());
+                        editor.commit();
                         break;
                     }
                 }
@@ -97,33 +111,35 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
         locationList.setTitle(locationList.getEntry());
     }
 
+
     private void getSuggestions(String value) {
+        dialog.show();
         JSONAsyncTask task = new JSONAsyncTask(this);
         task.execute("http://api.openweathermap.org/data/2.5/find?mode=json&type=like&q=" + value);
     }
 
     @Override
     public void display(JSONObject jsonObject) {
-        try{
+        try {
             JSONArray list = jsonObject.getJSONArray("list");
             int array_length = list.length();
 
             locations.clear();
-            for(int i = 0; i < array_length; i++){
+            for (int i = 0; i < array_length; i++) {
                 JSONObject location = list.getJSONObject(i);
-                locations.put(location.getString("name") + ", " + location.getJSONObject("sys").getString("country"), location.getString("id"));
+                locations.put(location.getString("id"), location.getString("name") + ", " + location.getJSONObject("sys").getString("country"));
             }
 
-            CharSequence[] keys = locations.keySet().toArray(new CharSequence[locations.size()]);
-            CharSequence[] values = locations.values().toArray(new CharSequence[locations.size()]);
+            CharSequence[] keys = locations.values().toArray(new CharSequence[locations.size()]);
+            CharSequence[] values = locations.keySet().toArray(new CharSequence[locations.size()]);
 
             locationList.setEntries(keys);
             locationList.setEntryValues(values);
             locationList.setValueIndex(0);
             locationList.setTitle(locationList.getEntry());
-
-        }catch (Exception e){
-            Log.v("Search",e.getMessage());
+            dialog.dismiss();
+        } catch (Exception e) {
+            Log.v("Search", e.getMessage());
         }
     }
 }
