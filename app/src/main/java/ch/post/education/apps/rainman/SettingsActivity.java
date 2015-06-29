@@ -8,6 +8,8 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.EditTextPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
@@ -16,9 +18,20 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
+import android.util.Log;
+import android.util.Xml;
+import android.view.View;
 
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.LineNumberInputStream;
+import java.net.Inet4Address;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -31,7 +44,7 @@ import java.util.List;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends PreferenceActivity implements BasicActivity {
     /**
      * Determines whether to always show the simplified settings UI, where
      * settings are presented in a single list. When false, settings are shown
@@ -40,12 +53,125 @@ public class SettingsActivity extends PreferenceActivity {
      */
     private static final boolean ALWAYS_SIMPLE_PREFS = false;
 
+    PreferenceCategory catManually;
+    ListPreference locationList;
+
+    HashMap<String,String> locations = new HashMap<String, String>();
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
 
-        setupSimplePreferencesScreen();
+        addPreferencesFromResource(R.xml.pref_location);
+        prefLocationAuto();
+        prefLocationManually();
+        //setupSimplePreferencesScreen();
+    }
+
+    private void prefLocationAuto(){
+        PreferenceCategory catAuto = new PreferenceCategory(this);
+        catAuto.setTitle(R.string.pref_auto);
+        getPreferenceScreen().addPreference(catAuto);
+
+        CheckBoxPreference useGPS = new CheckBoxPreference(this);
+        useGPS.setTitle(R.string.pref_useGPS);
+        useGPS.setSummary(R.string.pref_useGPS_summary);
+        useGPS.setDefaultValue(true);
+        useGPS.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                catManually.setEnabled(!((boolean) newValue));
+                return true;
+            }
+        });
+
+        catAuto.addPreference(useGPS);
+        getPreferenceScreen().addPreference(catAuto);
+    }
+
+    private void prefLocationManually(){
+        catManually = new PreferenceCategory(this);
+        catManually.setTitle(R.string.pref_manually);
+        catManually.setEnabled(false);
+        getPreferenceScreen().addPreference(catManually);
+
+        EditTextPreference searchLocation = new EditTextPreference(this);
+        searchLocation.setTitle(R.string.pref_searchLocation);
+        searchLocation.setSummary(R.string.pref_searchLocation_summary);
+
+        searchLocation.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                getSuggestions(newValue.toString());
+                return false;
+            }
+        });
+
+        catManually.addPreference(searchLocation);
+
+        locationList = new ListPreference(this);
+        locationList.setKey("pref_location");
+
+        locations.put("Bern, CH", "2661552");
+        locations.put("London, GB", "2643743");
+        locations.put("Stockholm, SE","2673730");
+
+        CharSequence[] keys = locations.keySet().toArray(new CharSequence[locations.size()]);
+        CharSequence[] values = locations.values().toArray(new CharSequence[locations.size()]);
+
+        locationList.setEntries(keys);
+        locationList.setEntryValues(values);
+        locationList.setSummary(R.string.pref_searchLocationList_summary);
+        locationList.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                for (Map.Entry<String, String> location : locations.entrySet()) {
+                    if(location.getValue().equals(newValue)){
+                        locationList.setTitle(location.getKey());
+                        break;
+                    }
+                }
+                return true;
+            }
+
+        });
+        locationList.setValueIndex(0);
+        locationList.setTitle(locationList.getEntry());
+
+        catManually.addPreference(locationList);
+    }
+
+    private void getSuggestions(String value) {
+        JSONAsyncTask task = new JSONAsyncTask(this);
+        task.execute("http://api.openweathermap.org/data/2.5/find?mode=json&type=like&q=" + value);
+    }
+
+    @Override
+    public void display(JSONObject jsonObject) {
+        try{
+            JSONArray list = jsonObject.getJSONArray("list");
+            int array_length = list.length();
+
+            locations.clear();
+            for(int i = 0; i < array_length; i++){
+                JSONObject location = list.getJSONObject(i);
+                locations.put(location.getString("name") + ", " + location.getJSONObject("sys").getString("country"), location.getString("id"));
+            }
+
+            CharSequence[] keys = locations.keySet().toArray(new CharSequence[locations.size()]);
+            CharSequence[] values = locations.values().toArray(new CharSequence[locations.size()]);
+
+            locationList.setEntries(keys);
+            locationList.setEntryValues(values);
+            locationList.setValueIndex(0);
+            locationList.setTitle(locationList.getEntry());
+
+            catManually.removePreference(locationList);
+            catManually.addPreference(locationList);
+
+        }catch (Exception e){
+            Log.v("Search",e.getMessage());
+        }
     }
 
     /**
