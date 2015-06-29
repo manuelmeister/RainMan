@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.os.Bundle;
@@ -28,7 +29,7 @@ import ch.post.education.apps.rainman.Model.Coordinates;
 import ch.post.education.apps.rainman.Model.Forecast;
 import ch.post.education.apps.rainman.Model.Location;
 
-public class MainActivity extends BasicActivity {
+public class MainActivity extends AppCompatActivity implements BasicActivity {
 
     public Coordinates cords;
     private LocationManager locationManager;
