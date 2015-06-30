@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer name="bar_weight">1</integer>
-    <string name="bar_title_margin">4dp</string>
+    <string name="bar_title_margin" translatable="false">4dp</string>
     <integer name="bar_title_fontSize">22</integer>
 
-    <string name="prefUseGPS">prefUseGPS</string>
-    <string name="prefAuto">prefAuto</string>
-    <string name="prefManually">prefManually</string>
-    <string name="prefLocation">prefLocation</string>
-    <string name="prefinput_Location">inputLocation</string>
+    <string name="prefUseGPS" translatable="false">prefUseGPS</string>
+    <string name="prefAuto" translatable="false">prefAuto</string>
+    <string name="prefManually" translatable="false">prefManually</string>
+    <string name="prefLocation" translatable="false">prefLocation</string>
+    <string name="prefinput_Location" translatable="false">inputLocation</string>
 </resources>

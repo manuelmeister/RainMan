@@ -4,6 +4,7 @@
     <string name="action_settings">Einstellungen</string>
     <string name="location">Standort</string>
     <string name="no_rain">Kein</string>
+    <string name="Error">Fehler</string>
     <string name="not_loaded">Nicht geladen</string>
     <string name="pref_auto">Automatisch</string>
     <string name="pref_manually">Manuell</string>
