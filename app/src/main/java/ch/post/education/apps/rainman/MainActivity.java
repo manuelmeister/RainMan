@@ -155,7 +155,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             text_location.setText(location.getName());
 
             double x = forecast.getRain();
-            int h = (int) ((2*(Math.pow(x,2)))/(Math.pow(x,2) + 1)*150);
+            int h = (int) ((2*(Math.pow(x,2)))/(Math.pow(x,2) + 1)*100);
 
             String rainbarText;
             if (forecast.getRain() != 0) {
@@ -167,7 +167,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             }
             textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
 
-            frameLayoutHelper(R.id.bar_pressure, getPXHeight(forecast.getPressure() / 6), R.color.pressure_background, false);
+            frameLayoutHelper(R.id.bar_pressure, getPXHeight(forecast.getPressure() / 5), R.color.pressure_background, false);
 
             textViewHelper(R.id.bar_pressure_value, String.valueOf(forecast.getPressure()) + " hPa", View.VISIBLE);
 
@@ -180,7 +180,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             ImageView weather_icon = (ImageView) findViewById(R.id.weather_icon);
             weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
 
-        } catch (JSONException e) {
+        } catch (Exception e) {
             showError("Error", e.getMessage());
         }
     }
@@ -218,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     public void showError(String title, String message) {
+        locationManager.removeUpdates(locationListener);
         Point dimen = new Point();
         getWindowManager().getDefaultDisplay().getSize(dimen);
         int height = dimen.x/3;
