@@ -96,6 +96,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         if(settings.getBoolean("useGPS",true)){
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }else {
+            //2661552 is the openweathermap.org ID for Berne, CH and is used as default value
             query = "id=" + settings.getString("locationID","2661552");
             runTask();
         }
