@@ -1,6 +1,9 @@
 package ch.post.education.apps.rainman;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.CheckBoxPreference;
@@ -122,22 +125,39 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
             JSONArray list = jsonObject.getJSONArray("list");
             int array_length = list.length();
 
-            locations.clear();
-            for (int i = 0; i < array_length; i++) {
-                JSONObject location = list.getJSONObject(i);
-                locations.put(location.getString("id"), location.getString("name") + ", " + location.getJSONObject("sys").getString("country"));
+            if(array_length == 0){
+                dialog.dismiss();
+                AlertDialog.Builder hint = new AlertDialog.Builder(this);
+                hint.setMessage("no citys found"); //todo use sting ressources
+                hint.setTitle("Error");
+                hint.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        PostEditTextPreferences editText = (PostEditTextPreferences) findPreference(getResources().getString(R.string.prefinput_Location));
+                        editText.show();
+                    }
+                });
+                hint.show();
+            } else {
+                locations.clear();
+                for (int i = 0; i < array_length; i++) {
+                    JSONObject location = list.getJSONObject(i);
+                    locations.put(location.getString("id"), location.getString("name") + ", " + location.getJSONObject("sys").getString("country"));
+                }
+
+                CharSequence[] keys = locations.values().toArray(new CharSequence[locations.size()]);
+                CharSequence[] values = locations.keySet().toArray(new CharSequence[locations.size()]);
+
+                locationList.setEntries(keys);
+                locationList.setEntryValues(values);
+                locationList.setValueIndex(0);
+                editor.putString("locationID", locationList.getValue()).apply();
+                editor.putString("locationName", locationList.getEntry().toString()).apply();
+                locationList.setTitle(locationList.getEntry());
+                dialog.dismiss();
             }
 
-            CharSequence[] keys = locations.values().toArray(new CharSequence[locations.size()]);
-            CharSequence[] values = locations.keySet().toArray(new CharSequence[locations.size()]);
-
-            locationList.setEntries(keys);
-            locationList.setEntryValues(values);
-            locationList.setValueIndex(0);
-            editor.putString("locationID", locationList.getValue()).apply();
-            editor.putString("locationName", locationList.getEntry().toString()).apply();
-            locationList.setTitle(locationList.getEntry());
-            dialog.dismiss();
         } catch (Exception e) {
             Log.v("Search", e.getMessage());
         }
