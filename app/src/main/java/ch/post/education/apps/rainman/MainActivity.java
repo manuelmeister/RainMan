@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     private SharedPreferences.Editor editor;
 
     /**
+     *
      * @param savedInstanceState
      */
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,11 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             public void onProviderDisabled(String provider) {
                 if (settings.getBoolean("useGPS", true)) {
                     locationManager.removeUpdates(locationListener);
-                    alert(R.string.Error, R.string.error_gps_disabled, new DialogInterface.OnClickListener() {
+                    AlertDialog.Builder elem = new AlertDialog.Builder(getApplicationContext());
+                    //noGPS.setIcon();//TODO: create no position icon
+                    elem.setTitle(getResources().getString(R.string.Error));
+                    elem.setMessage(getResources().getString( R.string.error_gps_disabled));
+                    elem.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             dialog.dismiss();
@@ -76,6 +82,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
                             getLocation();
                         }
                     });
+                    elem.show();
                 }
             }
 
@@ -91,28 +98,10 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
                 getLocation();
             }
         });
-        if (!this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            alert(R.string.Error, R.string.error_gps_disabled, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    dialog.dismiss();
-                    editor.putBoolean("useGPS", false).apply();
-                    getLocation();
-                }
-            });
-        }else {
+        if (this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
         }
 
-    }
-
-    public AlertDialog alert(int title, int message, DialogInterface.OnClickListener listener) {
-        AlertDialog.Builder elem = new AlertDialog.Builder(this);
-        //noGPS.setIcon();//TODO: create no position icon
-        elem.setTitle(getResources().getString(title));
-        elem.setMessage(getResources().getString(message));
-        elem.setPositiveButton("Ok", listener);
-        return elem.show();
     }
 
     protected void onPause() {
