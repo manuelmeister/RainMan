@@ -32,7 +32,6 @@ import ch.post.education.apps.rainman.Model.Location;
 
 public class MainActivity extends AppCompatActivity implements BasicActivity {
 
-    public Coordinates cords;
     private LocationManager locationManager;
     private LocationListener locationListener;
 
@@ -56,17 +55,13 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
             @Override
             public void onLocationChanged(android.location.Location location) {
-                cords = new Coordinates(location.getLongitude(), location.getLatitude());
-                query = "lat=" + cords.getLat() + "&lon=" + cords.getLon() ;
+                query = "lat=" + location.getLatitude() + "&lon=" + location.getLongitude() ;
                 runTask();
             }
-
             public void onStatusChanged(String provider, int status, Bundle extras) {
             }
-
             public void onProviderEnabled(String provider) {
             }
-
             public void onProviderDisabled(String provider) {
             }
 
@@ -113,6 +108,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         if(settings.getBoolean("useGPS",true)){
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
         }else {
+            //2661552 is the openweathermap.org ID for Berne, CH and is used as default value
             query = "id=" + settings.getString("locationID","2661552");
             runTask();
         }

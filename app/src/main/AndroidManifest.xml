@@ -22,6 +22,9 @@
         <activity
             android:name="ch.post.education.apps.rainman.SettingsActivity"
             android:label="@string/action_settings" >
+            <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value="ch.post.education.apps.rainman.MainActivity" />
         </activity>
     </application>
 
