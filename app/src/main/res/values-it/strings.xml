@@ -17,4 +17,5 @@
     <string name="action_settings">Preferenze</string>
     <string name="location">Position</string>
     <string name="no_rain">No</string>
+    <string name="error_gps_disabled">Non possiamo accedere alla tua posizione. Il posizionamento è stato impostato su manuale. La posizione può essere modificato nelle preferenze dell\'applicazione.</string>
 </resources>

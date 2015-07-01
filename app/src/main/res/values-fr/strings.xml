@@ -15,6 +15,7 @@
     <string name="pref_searchLocation">Recherche</string>
     <string name="pref_searchLocationList_summary">Appuyez pour sélectionner la ville des suggestions</string>
     <string name="pref_searchLocation_summary">Trouver la position avec le nom</string>
-    <string name="pref_useGPS">Utilise GPS</string>
-    <string name="pref_useGPS_summary">Utilise GPS pour trouver votre position</string>
+    <string name="pref_useGPS">Utiliser le GPS</string>
+    <string name="pref_useGPS_summary">Utilise le GPS pour trouver votre position</string>
+    <string name="error_gps_disabled">Nous ne pouvons pas accéder à votre position. Le positionnement a été réglé sur manuel. La position peut être changé dans les préférences de l\'application.</string>
 </resources>

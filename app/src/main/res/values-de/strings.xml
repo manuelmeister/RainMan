@@ -17,4 +17,5 @@
     <string name="weather_icon">Wettersymbol</string>
     <string name="pref_searchLocation_summary">Standort mit Name finden</string>
     <string name="pref_searchLocationList_summary">Standort aus Vorschlägen auswählen</string>
+    <string name="error_gps_disabled">Wir können nicht auf deinen Standort zugreifen. Die Standortbestimmung wurde auf manuell gesetzt. Der Standort kann in den App Einstellungen geändert werden.</string>
 </resources>
