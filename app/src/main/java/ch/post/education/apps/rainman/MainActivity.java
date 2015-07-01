@@ -41,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     private SharedPreferences settings;
     private SharedPreferences.Editor editor;
 
+    /**
+     * @param savedInstanceState
+     */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -83,12 +86,18 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         getLocation();
     }
 
+    /**
+     *
+     */
     @Override
     protected void onPause() {
         super.onPause();
         locationManager.removeUpdates(locationListener);
     }
 
+    /**
+     *
+     */
     @Override
     protected void onResume() {
         super.onResume();
@@ -97,6 +106,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         getLocation();
     }
 
+    /**
+     *
+     */
     private void getLocation() {
         if(settings.getBoolean("useGPS",true)){
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
@@ -106,6 +118,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         }
     }
 
+    /**
+     *
+     */
     public void runTask() {
         JSONAsyncTask task = new JSONAsyncTask(this);
         task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=10");
@@ -114,6 +129,10 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         swipeRefreshLayout.setRefreshing(false);
     }
 
+    /**
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -121,6 +140,10 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         return true;
     }
 
+    /**
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
@@ -138,6 +161,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * @param jsonObject
+     */
     @Override
     public void display(JSONObject jsonObject) {
         try {
@@ -185,15 +211,27 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         }
     }
 
+    /**
+     * @param height
+     * @return
+     */
     public int getPXHeight(double height) {
         float pixels = (float) ((height >= 60) ? height : 60);
         return (int) (pixels * getResources().getDisplayMetrics().density);
     }
 
+    /**
+     * @param height
+     * @return
+     */
     public int getDIPHeight(float height) {
         return (int) (height / getResources().getDisplayMetrics().density);
     }
 
+    /**
+     * @param weather
+     * @return
+     */
     public int getWeatherIcon(String weather) {
         int msg;
         Log.v("Weather",weather);
@@ -217,6 +255,10 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         return msg;
     }
 
+    /**
+     * @param title
+     * @param message
+     */
     public void showError(String title, String message) {
         locationManager.removeUpdates(locationListener);
         Point dimen = new Point();
@@ -240,6 +282,10 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         time.requestLayout();
     }
 
+    /**
+     * @param temp
+     * @return
+     */
     public int getBGColor(double temp) {
         int color;
         if (temp > 40) {
@@ -270,6 +316,11 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         return getResources().getColor(color);
     }
 
+    /**
+     * @param v
+     * @param initalHeight
+     * @param targetHeight
+     */
     public static void expand(final View v, final int initalHeight, final int targetHeight) {
         Animation a = new Animation() {
             @Override
@@ -291,6 +342,12 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         v.requestLayout();
     }
 
+    /**
+     * @param v
+     * @param initalHeight
+     * @param targetHeight
+     * @param temp
+     */
     public void expand(final View v, final int initalHeight, final int targetHeight, final double temp) {
         Animation a = new Animation() {
             @Override
