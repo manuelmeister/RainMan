@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     private SharedPreferences.Editor editor;
 
     /**
-     * @param savedInstanceState
+     * @param savedInstanceState SavedInstanceState
      */
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,8 +144,8 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param menu
-     * @return
+     * @param menu Menu
+     * @return boolean
      */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -155,8 +155,8 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param item
-     * @return
+     * @param item MenuItem
+     * @return boolean
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -176,7 +176,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param jsonObject
+     * @param jsonObject JSONObject
      */
     @Override
     public void display(JSONObject jsonObject) {
@@ -229,8 +229,8 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param height
-     * @return
+     * @param height double
+     * @return int
      */
     public int getPXHeight(double height) {
         float pixels = (float) ((height >= 60) ? height : 60);
@@ -238,16 +238,16 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param height
-     * @return
+     * @param height float
+     * @return int
      */
     public int getDIPHeight(float height) {
         return (int) (height / getResources().getDisplayMetrics().density);
     }
 
     /**
-     * @param weather
-     * @return
+     * @param weather String
+     * @return int
      */
     public int getWeatherIcon(String weather) {
         int msg;
