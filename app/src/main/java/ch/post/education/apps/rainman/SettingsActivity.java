@@ -39,6 +39,9 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
 
     HashMap<String, String> locations = new HashMap<String, String>();
 
+    /**
+     * @param savedInstanceState
+     */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -52,6 +55,9 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
         //setupSimplePreferencesScreen();
     }
 
+    /**
+     *
+     */
     private void prefLocationAuto() {
         catManually = (PreferenceCategory) findPreference(getResources().getString(R.string.prefManually));
 
@@ -70,6 +76,9 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
 
     }
 
+    /**
+     *
+     */
     private void prefLocationManually() {
 
         EditTextPreference searchLocation = (EditTextPreference) findPreference(getResources().getString(R.string.prefinput_Location));
@@ -110,12 +119,18 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
     }
 
 
+    /**
+     * @param value
+     */
     private void getSuggestions(String value) {
         dialog.show();
         JSONAsyncTask task = new JSONAsyncTask(this);
         task.execute("http://api.openweathermap.org/data/2.5/find?mode=json&type=like&q=" + value);
     }
 
+    /**
+     * @param jsonObject {@link JSONObject}
+     */
     @Override
     public void display(JSONObject jsonObject) {
         try {
