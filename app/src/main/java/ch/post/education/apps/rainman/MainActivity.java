@@ -10,7 +10,6 @@ import android.graphics.Color;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.wifi.WifiConfiguration;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -43,7 +42,6 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     private SharedPreferences.Editor editor;
 
     /**
-     *
      * @param savedInstanceState
      */
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,7 +72,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
                     AlertDialog.Builder elem = new AlertDialog.Builder(getApplicationContext());
                     //noGPS.setIcon();//TODO: create no position icon
                     elem.setTitle(getResources().getString(R.string.Error));
-                    elem.setMessage(getResources().getString( R.string.error_gps_disabled));
+                    elem.setMessage(getResources().getString(R.string.error_gps_disabled));
                     elem.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -217,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             int bar_temperature_height = getPXHeight(forecast.getTemperature().getDay() * 10);
             TextView bar_temperature_value = (TextView) findViewById(R.id.bar_temperature_value);
             TextView bar_temperature_title = (TextView) findViewById(R.id.bar_temperature_title);
-            expand(bar_temperature, bar_temperature_value,bar_temperature_title, bar_temperature.getHeight(), bar_temperature_height, forecast.getTemperature().getDay());
+            expand(bar_temperature, bar_temperature_value, bar_temperature_title, bar_temperature.getHeight(), bar_temperature_height, forecast.getTemperature().getDay());
 
             textViewHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
 
@@ -278,7 +276,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
      * @param category
      * @param message
      */
-    public void showError(String category, String title,String message) {
+    public void showError(String category, String title, String message) {
         locationManager.removeUpdates(locationListener);
         Point dimen = new Point();
         getWindowManager().getDefaultDisplay().getSize(dimen);
@@ -389,17 +387,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
         Integer colorFrom = getBGColor(getDIPHeight(initalHeight) / 10);
         Integer colorTo = getBGColor(temp);
-        int color = (int)Long.parseLong(colorTo.toString(), 16);
-        int r = (color >> 16) & 0xFF;
-        int g = (color >> 8) & 0xFF;
-        int b = (color >> 0) & 0xFF;
-        if((r*0.299 + g*0.58 + b*0.114) > 186){
-            tv.setTextColor(Color.BLACK);
-            tvt.setTextColor(Color.BLACK);
-        }else {
-            tv.setTextColor(Color.WHITE);
-            tvt.setTextColor(Color.WHITE);
-        }
+        int contrastTextColor = getContrastTextColor(colorTo);
+        tv.setTextColor(contrastTextColor);
+        tvt.setTextColor(contrastTextColor);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -413,9 +403,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         v.requestLayout();
     }
 
-    public int getContrastTextColor(){
-
-        return 0;
+    public int getContrastTextColor(Integer colorTo) {
+        int color = (int) Long.parseLong(colorTo.toString(), 16);
+        return (((((color >> 16) & 0xFF) * 0.299 + ((color >> 8) & 0xFF) * 0.58 + ((color) & 0xFF) * 0.114) > 186) ? Color.BLACK : Color.WHITE);
     }
 
     /**
