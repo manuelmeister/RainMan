@@ -2,19 +2,21 @@ package ch.post.education.apps.rainman;
 
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.View;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
@@ -53,21 +55,35 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
             @Override
             public void onLocationChanged(android.location.Location location) {
-                query = "lat=" + location.getLatitude() + "&lon=" + location.getLongitude() ;
+                query = "lat=" + location.getLatitude() + "&lon=" + location.getLongitude();
                 runTask();
             }
+
             public void onStatusChanged(String provider, int status, Bundle extras) {
             }
+
             public void onProviderEnabled(String provider) {
             }
+
             public void onProviderDisabled(String provider) {
+                if (settings.getBoolean("useGPS", true)) {
+                    locationManager.removeUpdates(locationListener);
+                    alert(R.string.Error, R.string.error_gps_disabled, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                            editor.putBoolean("useGPS", false).apply();
+                            getLocation();
+                        }
+                    });
+                }
             }
 
 
         };
 
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-        swipeRefreshLayout.setProgressViewEndTarget(false,(int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 58, getResources().getDisplayMetrics())));
+        swipeRefreshLayout.setProgressViewEndTarget(false, (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 58, getResources().getDisplayMetrics())));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
@@ -75,14 +91,30 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
                 getLocation();
             }
         });
+        if (!this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            alert(R.string.Error, R.string.error_gps_disabled, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    editor.putBoolean("useGPS", false).apply();
+                    getLocation();
+                }
+            });
+        }else {
+            getLocation();
+        }
 
-        getLocation();
     }
 
-    /**
-     *
-     */
-    @Override
+    public AlertDialog alert(int title, int message, DialogInterface.OnClickListener listener) {
+        AlertDialog.Builder elem = new AlertDialog.Builder(this);
+        //noGPS.setIcon();//TODO: create no position icon
+        elem.setTitle(getResources().getString(title));
+        elem.setMessage(getResources().getString(message));
+        elem.setPositiveButton("Ok", listener);
+        return elem.show();
+    }
+
     protected void onPause() {
         super.onPause();
         locationManager.removeUpdates(locationListener);
@@ -103,11 +135,11 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
      *
      */
     private void getLocation() {
-        if(settings.getBoolean("useGPS",true)){
+        if (settings.getBoolean("useGPS", true)) {
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-        }else {
+        } else {
             //2661552 is the openweathermap.org ID for Berne, CH and is used as default value
-            query = "id=" + settings.getString("locationID","2661552");
+            query = "id=" + settings.getString("locationID", "2661552");
             runTask();
         }
     }
@@ -175,7 +207,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             text_location.setText(location.getName());
 
             double x = forecast.getRain();
-            int h = (int) ((2*(Math.pow(x,2)))/(Math.pow(x,2) + 1)*100);
+            int h = (int) ((2 * (Math.pow(x, 2))) / (Math.pow(x, 2) + 1) * 100);
 
             String rainbarText;
             if (forecast.getRain() != 0) {
@@ -193,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
             int bar_temperature_height = getPXHeight(forecast.getTemperature().getDay() * 10);
-            expand(bar_temperature, bar_temperature.getHeight(),bar_temperature_height, forecast.getTemperature().getDay());
+            expand(bar_temperature, bar_temperature.getHeight(), bar_temperature_height, forecast.getTemperature().getDay());
 
             textViewHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
 
@@ -201,7 +233,8 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
 
         } catch (Exception e) {
-            showError("Error", e.getMessage());
+            //TODO: use Resource files
+            showError("Error", "No data", e.getMessage());
         }
     }
 
@@ -228,7 +261,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
      */
     public int getWeatherIcon(String weather) {
         int msg;
-        Log.v("Weather",weather);
+        Log.v("Weather", weather);
         if (weather.equals("Clear")) {
             msg = R.drawable.weather_sun;
         } else if (weather.equals("Clouds")) {
@@ -250,16 +283,16 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param title
+     * @param category
      * @param message
      */
-    public void showError(String title, String message) {
+    public void showError(String category, String title,String message) {
         locationManager.removeUpdates(locationListener);
         Point dimen = new Point();
         getWindowManager().getDefaultDisplay().getSize(dimen);
-        int height = dimen.x/3;
+        int height = (int) (dimen.x / 2.5);
 
-        frameLayoutHelper(R.id.bar_rain,height,R.color.error,false);
+        frameLayoutHelper(R.id.bar_rain, height, R.color.error, false);
         textViewHelper(R.id.bar_rain_value, "", View.INVISIBLE);
 
         frameLayoutHelper(R.id.bar_pressure, height, R.color.error, false);
@@ -268,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         frameLayoutHelper(R.id.bar_temperature, height, R.color.error, false);
         textViewHelper(R.id.bar_temperature_value, "", View.INVISIBLE);
 
+        textViewHelper(R.id.location, category, View.VISIBLE);
         textViewHelper(R.id.ErrorTitle, title, View.VISIBLE);
         textViewHelper(R.id.message, message, View.VISIBLE);
 
@@ -319,7 +353,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = (int) (initalHeight + (targetHeight-initalHeight) * interpolatedTime);
+                v.getLayoutParams().height = (int) (initalHeight + (targetHeight - initalHeight) * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -346,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
-                v.getLayoutParams().height = (int) (initalHeight + (targetHeight-initalHeight) * interpolatedTime);
+                v.getLayoutParams().height = (int) (initalHeight + (targetHeight - initalHeight) * interpolatedTime);
                 v.requestLayout();
             }
 
@@ -361,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         a.setInterpolator(new AccelerateDecelerateInterpolator());
         v.startAnimation(a);
 
-        Integer colorFrom = getBGColor(getDIPHeight(initalHeight)/10);
+        Integer colorFrom = getBGColor(getDIPHeight(initalHeight) / 10);
         Integer colorTo = getBGColor(temp);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
