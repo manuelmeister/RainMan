@@ -14,7 +14,8 @@
             <ch.post.education.apps.rainman.PostEditTextPreferences
                 android:title="@string/pref_searchLocation"
                 android:summary="@string/pref_searchLocation_summary"
-                android:key="@string/prefinput_Location"/>
+                android:singleLine="true"
+                android:key="@string/prefinput_Location" />
             <ListPreference
                 android:key="@string/prefLocation"
                 android:summary="@string/pref_searchLocationList_summary"/>
