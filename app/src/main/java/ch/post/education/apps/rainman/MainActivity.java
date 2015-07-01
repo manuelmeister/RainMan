@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -214,7 +215,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
             FrameLayout bar_temperature = (FrameLayout) findViewById(R.id.bar_temperature);
             int bar_temperature_height = getPXHeight(forecast.getTemperature().getDay() * 10);
-            expand(bar_temperature, bar_temperature.getHeight(), bar_temperature_height, forecast.getTemperature().getDay());
+            TextView bar_temperature_value = (TextView) findViewById(R.id.bar_temperature_value);
+            TextView bar_temperature_title = (TextView) findViewById(R.id.bar_temperature_title);
+            expand(bar_temperature, bar_temperature_value,bar_temperature_title, bar_temperature.getHeight(), bar_temperature_height, forecast.getTemperature().getDay());
 
             textViewHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
 
@@ -365,7 +368,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
      * @param targetHeight
      * @param temp
      */
-    public void expand(final View v, final int initalHeight, final int targetHeight, final double temp) {
+    public void expand(final View v, final TextView tv, final TextView tvt, final int initalHeight, final int targetHeight, final double temp) {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
@@ -386,16 +389,33 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
         Integer colorFrom = getBGColor(getDIPHeight(initalHeight) / 10);
         Integer colorTo = getBGColor(temp);
+        int color = (int)Long.parseLong(colorTo.toString(), 16);
+        int r = (color >> 16) & 0xFF;
+        int g = (color >> 8) & 0xFF;
+        int b = (color >> 0) & 0xFF;
+        if((r*0.299 + g*0.58 + b*0.114) > 186){
+            tv.setTextColor(Color.BLACK);
+            tvt.setTextColor(Color.BLACK);
+        }else {
+            tv.setTextColor(Color.WHITE);
+            tvt.setTextColor(Color.WHITE);
+        }
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
             @Override
             public void onAnimationUpdate(ValueAnimator animator) {
-                v.setBackgroundColor((Integer) animator.getAnimatedValue());
+                int color = (Integer) animator.getAnimatedValue();
+                v.setBackgroundColor(color);
             }
         });
         colorAnimation.start();
         v.requestLayout();
+    }
+
+    public int getContrastTextColor(){
+
+        return 0;
     }
 
     /**
