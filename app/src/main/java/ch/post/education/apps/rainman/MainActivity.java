@@ -6,8 +6,10 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.GradientDrawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -275,7 +277,12 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         locationManager.removeUpdates(locationListener);
         Point dimen = new Point();
         getWindowManager().getDefaultDisplay().getSize(dimen);
-        int height = (int) (dimen.x / 2.5);
+        int height = 100;
+        if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
+            height = (int) (dimen.x / 2.5);
+        }else {
+            height = (int) (dimen.y / 2.5);
+        }
 
         frameLayoutHelper(R.id.bar_rain, height, R.color.error, false);
         textViewHelper(R.id.bar_rain_value, "", View.INVISIBLE);
