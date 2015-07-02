@@ -21,4 +21,6 @@
     <string name="error_gps_disabled">We can\'t access your location. Positioning changed to manual mode. The location can be changed in the app settings.</string>
     <string name="error_no_internet">No Internet</string>
     <string name="error_retry">Please check internet connection and try to refresh</string>
+    <string name="error_no_data">Exception</string>
+    <string name="error_city_not_found">City not found</string>
 </resources>

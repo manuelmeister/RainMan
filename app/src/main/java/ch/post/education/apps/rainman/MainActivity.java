@@ -234,8 +234,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
 
         } catch (Exception e) {
-            //TODO: use Resource files
-            showError("Error", "No data", e.getMessage());
+            showError(getResources().getString(R.string.Error), getString(R.string.error_no_data), e.getMessage());
         }
     }
 
