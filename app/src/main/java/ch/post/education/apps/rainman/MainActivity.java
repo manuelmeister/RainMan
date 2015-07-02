@@ -10,7 +10,6 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.Point;
-import android.graphics.drawable.GradientDrawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
@@ -33,8 +32,6 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import java.net.InetAddress;
-
 import ch.post.education.apps.rainman.Model.Forecast;
 import ch.post.education.apps.rainman.Model.Location;
 
@@ -49,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     private SharedPreferences.Editor editor;
 
     /**
+     * Creates the view and adds the locationListener
      * @param savedInstanceState SavedInstanceState
      */
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,13 +103,16 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
 
     }
 
+    /**
+     * Removes the locationListener from the System service
+     */
     protected void onPause() {
         super.onPause();
         locationManager.removeUpdates(locationListener);
     }
 
     /**
-     *
+     * If the activity is activated, the spinner gets displayed and the location is searched
      */
     @Override
     protected void onResume() {
@@ -122,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     *
+     * Either gets the location via GPS or the manual settings
      */
     private void getLocation() {
         if (settings.getBoolean("useGPS", true)) {
@@ -135,12 +136,13 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     *
+     * Runs the network task
      */
     public void runTask() {
         if(isNetworkConnected()){
             JSONAsyncTask task = new JSONAsyncTask(this);
             task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=10");
+            //TODO: Put this to the beginning
             locationManager.removeUpdates(locationListener);
             SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
             swipeRefreshLayout.setRefreshing(false);
@@ -154,6 +156,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
+     * Creates menu
      * @param menu Menu
      * @return boolean
      */
@@ -165,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
+     * Menu Action Handler
      * @param item MenuItem
      * @return boolean
      */
@@ -186,6 +190,8 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
+     * Sets the bars according to the JSONObject
+     * Description at {@link ch.post.education.apps.rainman.BasicActivity#display(JSONObject)}
      * @param jsonObject JSONObject
      */
     @Override
@@ -210,14 +216,14 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             String rainbarText;
             if (forecast.getRain() != 0) {
                 rainbarText = String.valueOf(forecast.getRain()) + " mm";
-                frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background, false);
+                frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background);
             } else {
                 rainbarText = getResources().getString(R.string.no_rain);
-                frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background_fail, false);
+                frameLayoutHelper(R.id.bar_rain, getPXHeight(h), R.color.rain_background_fail);
             }
             textViewHelper(R.id.bar_rain_value, rainbarText, View.VISIBLE);
 
-            frameLayoutHelper(R.id.bar_pressure, getPXHeight(forecast.getPressure() / 5), R.color.pressure_background, false);
+            frameLayoutHelper(R.id.bar_pressure, getPXHeight(forecast.getPressure() / 5), R.color.pressure_background);
 
             textViewHelper(R.id.bar_pressure_value, String.valueOf(forecast.getPressure()) + " hPa", View.VISIBLE);
 
@@ -239,25 +245,28 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param height double
+     * Converts dip to px
+     * @param dip double
      * @return int
      */
-    public int getPXHeight(double height) {
-        float pixels = (float) ((height >= 60) ? height : 60);
+    public int getPXHeight(double dip) {
+        float pixels = (float) ((dip >= 60) ? dip : 60);
         return (int) (pixels * getResources().getDisplayMetrics().density);
     }
 
     /**
-     * @param height float
+     * Converts px to dip
+     * @param px float
      * @return int
      */
-    public int getDIPHeight(float height) {
-        return (int) (height / getResources().getDisplayMetrics().density);
+    public int getDIPHeight(float px) {
+        return (int) (px / getResources().getDisplayMetrics().density);
     }
 
     /**
+     * Gets the weather icon according to the String given
      * @param weather String
-     * @return int
+     * @return int R.drawable resource
      */
     public int getWeatherIcon(String weather) {
         int msg;
@@ -283,8 +292,10 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param category
-     * @param message
+     * Displays the error using the weather bars
+     * @param category String
+     * @param title String
+     * @param message String
      */
     public void showError(String category, String title, String message) {
         locationManager.removeUpdates(locationListener);
@@ -297,13 +308,13 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             height = (int) (dimen.y / 2.5);
         }
 
-        frameLayoutHelper(R.id.bar_rain, height, R.color.error, false);
+        frameLayoutHelper(R.id.bar_rain, height, R.color.error);
         textViewHelper(R.id.bar_rain_value, "", View.INVISIBLE);
 
-        frameLayoutHelper(R.id.bar_pressure, height, R.color.error, false);
+        frameLayoutHelper(R.id.bar_pressure, height, R.color.error);
         textViewHelper(R.id.bar_pressure_value, "", View.INVISIBLE);
 
-        frameLayoutHelper(R.id.bar_temperature, height, R.color.error, false);
+        frameLayoutHelper(R.id.bar_temperature, height, R.color.error);
         textViewHelper(R.id.bar_temperature_value, "", View.INVISIBLE);
 
         textViewHelper(R.id.location, category, View.VISIBLE);
@@ -316,8 +327,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param temp
-     * @return
+     * Gets the color according to the temperature
+     * @param temp double
+     * @return int
      */
     public int getBGColor(double temp) {
         int color;
@@ -350,9 +362,9 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param v
-     * @param initalHeight
-     * @param targetHeight
+     * @param v View
+     * @param initalHeight int
+     * @param targetHeight int
      */
     public static void expand(final View v, final int initalHeight, final int targetHeight) {
         Animation a = new Animation() {
@@ -376,12 +388,15 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
-     * @param v
-     * @param initalHeight
-     * @param targetHeight
-     * @param temp
+     * Enlarges a view from its initalHeight to the targetHeight and gives the temperature
+     * @param v View
+     * @param bar_value TextView
+     * @param bar_title TextView
+     * @param initalHeight int
+     * @param targetHeight int
+     * @param temp double
      */
-    public void expand(final View v, final TextView tv, final TextView tvt, final int initalHeight, final int targetHeight, final double temp) {
+    public void expand(final View v, final TextView bar_value, final TextView bar_title, final int initalHeight, final int targetHeight, final double temp) {
         Animation a = new Animation() {
             @Override
             protected void applyTransformation(float interpolatedTime, Transformation t) {
@@ -403,8 +418,8 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         Integer colorFrom = getBGColor(getDIPHeight(initalHeight) / 10);
         Integer colorTo = getBGColor(temp);
         int contrastTextColor = getContrastTextColor(colorTo);
-        tv.setTextColor(contrastTextColor);
-        tvt.setTextColor(contrastTextColor);
+        bar_value.setTextColor(contrastTextColor);
+        bar_title.setTextColor(contrastTextColor);
         ValueAnimator colorAnimation = ValueAnimator.ofObject(new ArgbEvaluator(), colorFrom, colorTo);
         colorAnimation.setDuration((int) (targetHeight / v.getContext().getResources().getDisplayMetrics().density) * 3);
         colorAnimation.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -418,12 +433,18 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         v.requestLayout();
     }
 
-    public int getContrastTextColor(Integer colorTo) {
-        int color = (int) Long.parseLong(colorTo.toString(), 16);
+    /**
+     * Gets the contrast color of the given backgroundColor
+     * @param backgroundColor Integer
+     * @return int contrastTextColor
+     */
+    public int getContrastTextColor(Integer backgroundColor) {
+        int color = (int) Long.parseLong(backgroundColor.toString(), 16);
         return (((((color >> 16) & 0xFF) * 0.299 + ((color >> 8) & 0xFF) * 0.58 + ((color) & 0xFF) * 0.114) > 186) ? Color.BLACK : Color.WHITE);
     }
 
     /**
+     * Sets the text and visibility of a TextView
      * @param elem    Target element {@link #onCreate}
      * @param text    Content of the value
      * @param visible One of {@link android.view.View#VISIBLE}, {@link android.view.View#INVISIBLE}, or {@link android.view.View#GONE}.
@@ -435,18 +456,22 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
     }
 
     /**
+     * Sets the color and the height of a frameLayout
      * @param elem                   Target element {@link #onCreate}
      * @param desired_element_height Height of the bar
      * @param color                  Color
-     * @param error                  If the frame transitions to an error
      */
-    private void frameLayoutHelper(int elem, int desired_element_height, int color, boolean error) {
+    private void frameLayoutHelper(int elem, int desired_element_height, int color) {
         FrameLayout element = (FrameLayout) findViewById(elem);
         int inital_element_height = element.getLayoutParams().height;
         element.setBackgroundColor(getResources().getColor(color));
         expand(element, inital_element_height, desired_element_height);
     }
 
+    /**
+     * Checks if you are connected to the internet
+     * @return boolean
+     */
     private boolean isNetworkConnected() {
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo ni = cm.getActiveNetworkInfo();

@@ -43,7 +43,8 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
     HashMap<String, String> locations = new HashMap<String, String>();
 
     /**
-     * @param savedInstanceState
+     * After view has been initalized, it gets the shared preferences and displays the current settings
+     * @param savedInstanceState Bundle
      */
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -59,7 +60,7 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
     }
 
     /**
-     *
+     * Creates the automatically category
      */
     private void prefLocationAuto() {
         catManually = (PreferenceCategory) findPreference(getResources().getString(R.string.prefManually));
@@ -80,7 +81,7 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
     }
 
     /**
-     *
+     * Creates the manually category
      */
     private void prefLocationManually() {
 
@@ -123,7 +124,8 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
 
 
     /**
-     * @param value
+     * Gets suggestions according to the String input
+     * @param value String
      */
     private void getSuggestions(String value) {
         dialog.show();
@@ -132,6 +134,7 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
     }
 
     /**
+     * Displays the results of the location
      * @param jsonObject {@link JSONObject}
      */
     @Override

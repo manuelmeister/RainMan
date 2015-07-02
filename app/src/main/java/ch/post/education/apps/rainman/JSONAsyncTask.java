@@ -9,6 +9,9 @@ import org.json.JSONObject;
 import java.net.URL;
 import java.net.URLConnection;
 
+/**
+ * Custom task to download JSON
+ */
 public class JSONAsyncTask extends AsyncTask<String,Integer,JSONObject> {
 
     private BasicActivity activity;
