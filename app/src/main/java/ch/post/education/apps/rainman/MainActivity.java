@@ -139,17 +139,13 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
      * Runs the network task
      */
     public void runTask() {
+        locationManager.removeUpdates(locationListener);
+        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
+        swipeRefreshLayout.setRefreshing(false);
         if(isNetworkConnected()){
             JSONAsyncTask task = new JSONAsyncTask(this);
             task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=10");
-            //TODO: Put this to the beginning
-            locationManager.removeUpdates(locationListener);
-            SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-            swipeRefreshLayout.setRefreshing(false);
         } else {
-            locationManager.removeUpdates(locationListener);
-            SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-            swipeRefreshLayout.setRefreshing(false);
             showError(getResources().getString(R.string.Error), getResources().getString(R.string.error_no_internet), getResources().getString(R.string.error_retry));
         }
 
