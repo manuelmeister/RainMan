@@ -86,12 +86,10 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
                     elem.show();
                 }
             }
-
-
         };
 
         SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-        swipeRefreshLayout.setProgressViewEndTarget(false, (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 58, getResources().getDisplayMetrics())));
+        swipeRefreshLayout.setProgressViewEndTarget(false, (int) (TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 97.75f, getResources().getDisplayMetrics())));
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
 
             @Override
