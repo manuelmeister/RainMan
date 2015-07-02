@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         editor = settings.edit();
 
         this.locationManager = (LocationManager) this.getSystemService(LOCATION_SERVICE);
-        this.locationListener = new LocationListener() {
+        this.locationListener = new PostLocationListener(this) {
 
             @Override
             public void onLocationChanged(android.location.Location location) {
@@ -60,16 +60,11 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
                 runTask();
             }
 
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            public void onProviderEnabled(String provider) {
-            }
-
+            @Override
             public void onProviderDisabled(String provider) {
                 if (settings.getBoolean("useGPS", true)) {
                     locationManager.removeUpdates(locationListener);
-                    AlertDialog.Builder elem = new AlertDialog.Builder(getApplicationContext());
+                    AlertDialog.Builder elem = new AlertDialog.Builder(context);
                     //noGPS.setIcon();//TODO: create no position icon
                     elem.setTitle(getResources().getString(R.string.Error));
                     elem.setMessage(getResources().getString(R.string.error_gps_disabled));
