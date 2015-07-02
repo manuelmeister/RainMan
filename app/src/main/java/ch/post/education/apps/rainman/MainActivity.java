@@ -294,7 +294,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             height = (int) (dimen.x / 2.5);
         }else {
-            height = (int) (dimen.y / 2.5);
+            height = (int) (dimen.y / 4);
         }
 
         frameLayoutHelper(R.id.bar_rain, height, R.color.error, false);
