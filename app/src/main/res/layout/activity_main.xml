@@ -31,7 +31,8 @@
                 android:layout_below="@+id/weather_icon"
                 android:layout_centerHorizontal="true"
                 android:importantForAccessibility="yes"
-                android:singleLine="true" />
+                android:singleLine="true"
+                android:paddingTop="16dp" />
 
             <TextView
                 android:layout_width="wrap_content"
