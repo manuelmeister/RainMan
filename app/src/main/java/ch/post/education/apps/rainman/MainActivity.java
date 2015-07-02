@@ -99,6 +99,20 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         });
         if (this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
+        }else {
+            AlertDialog.Builder elem = new AlertDialog.Builder(getApplicationContext());
+            //noGPS.setIcon();//TODO: create no position icon
+            elem.setTitle(getResources().getString(R.string.Error));
+            elem.setMessage(getResources().getString(R.string.error_gps_disabled));
+            elem.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialog.dismiss();
+                    editor.putBoolean("useGPS", false).apply();
+                    getLocation();
+                }
+            });
+            elem.show();
         }
 
     }
