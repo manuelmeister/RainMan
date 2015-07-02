@@ -146,8 +146,8 @@ public class SettingsActivity extends PreferenceActivity implements BasicActivit
             if(array_length == 0){
                 dialog.dismiss();
                 AlertDialog.Builder hint = new AlertDialog.Builder(this);
-                hint.setMessage("no citys found"); //todo use sting ressources
-                hint.setTitle("Error");
+                hint.setMessage(getString(R.string.error_city_not_found));
+                hint.setTitle(getResources().getString(R.string.Error));
                 hint.setPositiveButton("OK", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {

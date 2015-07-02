@@ -232,11 +232,11 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
             textViewHelper(R.id.bar_temperature_value, String.valueOf(forecast.getTemperature().getDay()) + " °C", View.VISIBLE);
 
             ImageView weather_icon = (ImageView) findViewById(R.id.weather_icon);
+            weather_icon.setVisibility(View.VISIBLE);
             weather_icon.setImageDrawable(getResources().getDrawable(getWeatherIcon(forecast.getWeather().getMain())));
 
         } catch (Exception e) {
-            //TODO: use Resource files
-            showError("Error", "No data", e.getMessage());
+            showError(getResources().getString(R.string.Error), getString(R.string.error_no_data), e.getMessage());
         }
     }
 
@@ -300,8 +300,12 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         int height = 100;
         if(getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
             height = (int) (dimen.x / 2.5);
+            ImageView weather_icon = (ImageView) findViewById(R.id.weather_icon);
+            weather_icon.setVisibility(View.VISIBLE);
         }else {
-            height = (int) (dimen.y / 2.5);
+            height = (int) (dimen.y / 4);
+            ImageView weather_icon = (ImageView) findViewById(R.id.weather_icon);
+            weather_icon.setVisibility(View.GONE);
         }
 
         frameLayoutHelper(R.id.bar_rain, height, R.color.error);

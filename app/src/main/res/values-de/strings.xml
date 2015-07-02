@@ -20,4 +20,6 @@
     <string name="error_gps_disabled">Wir können nicht auf deinen Standort zugreifen. Die Standortbestimmung wurde auf manuell gesetzt. Der Standort kann in den App Einstellungen geändert werden.</string>
     <string name="error_no_internet">Kein Internet</string>
     <string name="error_retry">Bitte überprüfe die Internetverbindung und aktuallisieren Sie.</string>
+    <string name="error_no_data">Exception</string>
+    <string name="error_city_not_found">Standort nicht gefunden</string>
 </resources>

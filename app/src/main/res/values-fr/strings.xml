@@ -20,4 +20,6 @@
     <string name="error_gps_disabled">Nous ne pouvons pas accéder à votre position. Le positionnement a été réglé sur manuel. La position peut être changé dans les préférences de l\'application.</string>
     <string name="error_no_internet">Non Internet</string>
     <string name="error_retry">S\'il vous plaît vérifier votre connexion Internet et rafraîchir</string>
+    <string name="error_no_data">Exception</string>
+    <string name="error_city_not_found">Position pas trouvé</string>
 </resources>
