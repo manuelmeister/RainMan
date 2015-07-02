@@ -19,4 +19,6 @@
     <string name="pref_searchLocationList_summary">Tap to select city from suggestions</string>
     <string name="not_loaded">not loaded</string>
     <string name="error_gps_disabled">We can\'t access your location. Positioning changed to manual mode. The location can be changed in the app settings.</string>
+    <string name="error_no_internet">No Internet</string>
+    <string name="error_retry">Please check internet connection and try to refresh</string>
 </resources>

@@ -18,4 +18,6 @@
     <string name="location">Position</string>
     <string name="no_rain">No</string>
     <string name="error_gps_disabled">Non possiamo accedere alla tua posizione. Il posizionamento è stato impostato su manuale. La posizione può essere modificato nelle preferenze dell\'applicazione.</string>
+    <string name="error_no_internet">No Internet</string>
+    <string name="error_retry">Contrlla la tua connessione a Internet e aggiornare</string>
 </resources>
