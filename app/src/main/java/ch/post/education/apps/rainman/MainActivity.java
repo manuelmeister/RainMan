@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         if (this.locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             getLocation();
         }else {
-            AlertDialog.Builder elem = new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder elem = new AlertDialog.Builder(this);
             //noGPS.setIcon();//TODO: create no position icon
             elem.setTitle(getResources().getString(R.string.Error));
             elem.setMessage(getResources().getString(R.string.error_gps_disabled));
