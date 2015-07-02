@@ -20,20 +20,16 @@ public class JSONAsyncTask extends AsyncTask<String,Integer,JSONObject> {
     @Override
     protected JSONObject doInBackground(String... params) {
         JSONObject result = null;
-        int counter = 0;
-        while (result == null){
-            try {
-                URL url = new URL(params[0]);
-                URLConnection connection = url.openConnection();
-                String msg = IOUtils.toString(connection.getInputStream());
-                result = new JSONObject(msg);
-            } catch (Exception e) {
-                Log.v("Connection",e.getMessage());
-            }
-            if(counter++ > 10){
-                break;
-            }
+
+        try {
+            URL url = new URL(params[0]);
+            URLConnection connection = url.openConnection();
+            String msg = IOUtils.toString(connection.getInputStream());
+            result = new JSONObject(msg);
+        } catch (Exception e) {
+            Log.v("Connection",e.getMessage());
         }
+
 
         return result;
     }

@@ -3,6 +3,7 @@ package ch.post.education.apps.rainman;
 import android.animation.ArgbEvaluator;
 import android.animation.ValueAnimator;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,8 @@ import android.graphics.Point;
 import android.graphics.drawable.GradientDrawable;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -29,6 +32,8 @@ import android.widget.TextClock;
 import android.widget.TextView;
 
 import org.json.JSONObject;
+
+import java.net.InetAddress;
 
 import ch.post.education.apps.rainman.Model.Forecast;
 import ch.post.education.apps.rainman.Model.Location;
@@ -133,11 +138,19 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
      *
      */
     public void runTask() {
-        JSONAsyncTask task = new JSONAsyncTask(this);
-        task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=10");
-        locationManager.removeUpdates(locationListener);
-        SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
-        swipeRefreshLayout.setRefreshing(false);
+        if(isNetworkConnected()){
+            JSONAsyncTask task = new JSONAsyncTask(this);
+            task.execute("http://api.openweathermap.org/data/2.5/forecast/daily?" + query + "&mode=json&units=metric&cnt=10");
+            locationManager.removeUpdates(locationListener);
+            SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
+            swipeRefreshLayout.setRefreshing(false);
+        } else {
+            locationManager.removeUpdates(locationListener);
+            SwipeRefreshLayout swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.Swipe);
+            swipeRefreshLayout.setRefreshing(false);
+            showError(getResources().getString(R.string.Error), getResources().getString(R.string.error_no_internet), getResources().getString(R.string.error_retry));
+        }
+
     }
 
     /**
@@ -432,5 +445,15 @@ public class MainActivity extends AppCompatActivity implements BasicActivity {
         int inital_element_height = element.getLayoutParams().height;
         element.setBackgroundColor(getResources().getColor(color));
         expand(element, inital_element_height, desired_element_height);
+    }
+
+    private boolean isNetworkConnected() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo ni = cm.getActiveNetworkInfo();
+        if (ni == null) {
+            // There are no active networks.
+            return false;
+        } else
+            return true;
     }
 }
