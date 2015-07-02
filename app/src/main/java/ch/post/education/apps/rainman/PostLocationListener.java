@@ -5,6 +5,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.os.Bundle;
 
+/**
+ * Custom Listener to give the context
+ */
 public class PostLocationListener implements LocationListener {
 
     public Context context;
@@ -13,8 +16,11 @@ public class PostLocationListener implements LocationListener {
         this.context = context;
     }
 
+    /**
+     * Triggers if the location changes
+     * @param location Location
+     */
     @Override
-
     public void onLocationChanged(Location location) {
 
     }
@@ -29,6 +35,10 @@ public class PostLocationListener implements LocationListener {
 
     }
 
+    /**
+     * Triggers if GPS has been turned off
+     * @param provider String
+     */
     @Override
     public void onProviderDisabled(String provider) {
 
